@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_website
+    - node.type.apidae_object
+id: node.apidae_object.ao_website
+field_name: ao_website
+entity_type: node
+bundle: apidae_object
+label: Site web
+description: "Adresse web du site"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: string

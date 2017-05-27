@@ -1,0 +1,189 @@
+# fields types = FieldWidget classes (hence the number and string_textfield types)
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.field.node.apidae_object.ao_id
+    - field.field.node.apidae_object.body
+    - field.field.node.apidae_object.ao_type
+    - field.field.node.apidae_object.ao_address1
+    - field.field.node.apidae_object.ao_address2
+    - field.field.node.apidae_object.ao_address3
+    - field.field.node.apidae_object.ao_postal_code
+    - field.field.node.apidae_object.ao_town
+    - field.field.node.apidae_object.ao_latitude
+    - field.field.node.apidae_object.ao_longitude
+    - field.field.node.apidae_object.ao_email
+    - field.field.node.apidae_object.ao_telephone
+    - field.field.node.apidae_object.ao_facebook
+    - field.field.node.apidae_object.ao_website
+    - field.field.node.apidae_object.ao_short_desc
+    - field.field.node.apidae_object.ao_pic1_large
+    - field.field.node.apidae_object.ao_pic1_medium
+    - field.field.node.apidae_object.ao_pic1_title
+    - field.field.node.apidae_object.ao_pic1_credits
+    - field.field.node.apidae_object.ao_video_url
+    - field.field.node.apidae_object.ao_video_title
+    - field.field.node.apidae_object.ao_pdf_url
+    - field.field.node.apidae_object.ao_pdf_title
+    - field.field.node.apidae_object.ao_openings
+    - field.field.node.apidae_object.ao_rates
+    - node.type.apidae_object
+id: node.apidae_object.default
+targetEntityType: node
+bundle: apidae_object
+mode: default
+content:
+  ao_id:
+    label: hidden
+    type: number
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+  body:
+    label: hidden
+    type: text_textarea_with_summary
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+  ao_type:
+    label: hidden
+    type: string_textfield
+    weight: 102
+    settings: {  }
+    third_party_settings: {  }
+  ao_address1:
+    label: hidden
+    type: string_textfield
+    weight: 103
+    settings: {  }
+    third_party_settings: {  }
+  ao_address2:
+    label: hidden
+    type: string_textfield
+    weight: 104
+    settings: {  }
+    third_party_settings: {  }
+  ao_address3:
+    label: hidden
+    type: string_textfield
+    weight: 105
+    settings: {  }
+    third_party_settings: {  }
+  ao_postal_code:
+    label: hidden
+    type: string_textfield
+    weight: 106
+    settings: {  }
+    third_party_settings: {  }
+  ao_town:
+    label: hidden
+    type: string_textfield
+    weight: 107
+    settings: {  }
+    third_party_settings: {  }
+  ao_latitude:
+    label: hidden
+    type: number
+    weight: 108
+    settings: {  }
+    third_party_settings: {  }
+  ao_longitude:
+    label: hidden
+    type: number
+    weight: 109
+    settings: {  }
+    third_party_settings: {  }
+  ao_email:
+    label: hidden
+    type: string_textfield
+    weight: 110
+    settings: {  }
+    third_party_settings: {  }
+  ao_telephone:
+    label: hidden
+    type: string_textfield
+    weight: 111
+    settings: {  }
+    third_party_settings: {  }
+  ao_facebook:
+    label: hidden
+    type: string_textfield
+    weight: 112
+    settings: {  }
+    third_party_settings: {  }
+  ao_website:
+    label: hidden
+    type: string_textfield
+    weight: 113
+    settings: {  }
+    third_party_settings: {  }
+  ao_short_desc:
+    label: hidden
+    type: string_textfield
+    weight: 114
+    settings: {  }
+    third_party_settings: {  }
+  ao_pic1_large:
+    label: hidden
+    type: string_textfield
+    weight: 115
+    settings: {  }
+    third_party_settings: {  }
+  ao_pic1_medium:
+    label: hidden
+    type: string_textfield
+    weight: 116
+    settings: {  }
+    third_party_settings: {  }
+  ao_pic1_title:
+    label: hidden
+    type: string_textfield
+    weight: 117
+    settings: {  }
+    third_party_settings: {  }
+  ao_pic1_credits:
+    label: hidden
+    type: string_textfield
+    weight: 118
+    settings: {  }
+    third_party_settings: {  }
+  ao_video_title:
+    label: hidden
+    type: string_textfield
+    weight: 119
+    settings: {  }
+    third_party_settings: {  }
+  ao_video_url:
+    label: hidden
+    type: string_textfield
+    weight: 120
+    settings: {  }
+    third_party_settings: {  }
+  ao_pdf_title:
+    label: hidden
+    type: string_textfield
+    weight: 121
+    settings: {  }
+    third_party_settings: {  }
+  ao_pdf_url:
+    label: hidden
+    type: string_textfield
+    weight: 122
+    settings: {  }
+    third_party_settings: {  }
+  ao_openings:
+    label: hidden
+    type: string_textfield
+    weight: 123
+    settings: {  }
+    third_party_settings: {  }
+  ao_rates:
+    label: hidden
+    type: string_textfield
+    weight: 124
+    settings: {  }
+    third_party_settings: {  }
+  links:
+    weight: 100
+hidden: {  }

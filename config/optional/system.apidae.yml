@@ -1,0 +1,10 @@
+api:
+  url: 'https://api.sitra-tourisme.com/api/v002'
+  key: ''
+  project: ''
+data:
+  selections: ''
+cron:
+  active: true
+  type: 'new_content_and_updates'
+  frequency: 7

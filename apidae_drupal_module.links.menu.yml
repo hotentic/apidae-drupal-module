@@ -1,0 +1,5 @@
+apidae.config:
+  route_name: apidae.config
+  title: 'Paramétrage Apidae'
+  description: "Paramétrage des flux de données issus d'Apidae"
+  parent: system.admin_config_system

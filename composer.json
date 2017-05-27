@@ -1,0 +1,22 @@
+{
+  "name": "apidae-tourisme/apiade_drupal_module",
+  "description": "A Drupal module to import Apidae data into Drupal sites (version 8.x and above)",
+  "type": "drupal-module",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dave Loper",
+      "email": "dave@loper.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/apidae-tourisme/sitra-api-php"
+    }
+  ],
+  "require": {
+    "sitra-tourisme/sitra-api-php": "dev-master"
+  }
+}

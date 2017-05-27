@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_openings
+    - node.type.apidae_object
+id: node.apidae_object.ao_openings
+field_name: ao_openings
+entity_type: node
+bundle: apidae_object
+label: "Périodes d'ouverture"
+description: "Périodes d'ouverture en clair"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: text

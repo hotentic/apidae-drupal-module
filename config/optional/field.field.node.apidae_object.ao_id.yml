@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_id
+    - node.type.apidae_object
+id: node.apidae_object.ao_id
+field_name: ao_id
+entity_type: node
+bundle: apidae_object
+label: Identifiant Apidae
+description: "Identifiant de l'objet dans la base de données Apidae"
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: integer

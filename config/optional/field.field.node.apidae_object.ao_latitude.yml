@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_latitude
+    - node.type.apidae_object
+id: node.apidae_object.ao_latitude
+field_name: ao_latitude
+entity_type: node
+bundle: apidae_object
+label: Latitude
+description: "Latitude"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: float

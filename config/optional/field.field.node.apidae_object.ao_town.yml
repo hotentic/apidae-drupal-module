@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_town
+    - node.type.apidae_object
+id: node.apidae_object.ao_town
+field_name: ao_town
+entity_type: node
+bundle: apidae_object
+label: Commune
+description: "Nom de la commune"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: string

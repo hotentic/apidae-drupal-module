@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_type
+    - node.type.apidae_object
+id: node.apidae_object.ao_type
+field_name: ao_type
+entity_type: node
+bundle: apidae_object
+label: Type d'objet
+description: "Type de l'objet touristique Apidae"
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: string

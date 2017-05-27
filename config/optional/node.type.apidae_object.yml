@@ -1,0 +1,13 @@
+langcode: fr
+status: true
+dependencies:
+  enforced:
+    module:
+      - apidae_drupal_module
+name: 'Objet touristique Apidae'
+type: apidae_object
+description: 'Type de contenu modélisant les objets touristiques issus de la plateforme Apidae'
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: true

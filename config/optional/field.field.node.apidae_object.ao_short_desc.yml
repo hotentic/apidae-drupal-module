@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_short_desc
+    - node.type.apidae_object
+id: node.apidae_object.ao_short_desc
+field_name: ao_short_desc
+entity_type: node
+bundle: apidae_object
+label: Description courte
+description: "Description courte"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: string

@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_postal_code
+    - node.type.apidae_object
+id: node.apidae_object.ao_postal_code
+field_name: ao_postal_code
+entity_type: node
+bundle: apidae_object
+label: Code postal
+description: "Code postal"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: string

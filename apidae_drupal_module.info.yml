@@ -1,0 +1,6 @@
+name: 'Apidae Drupal Module'
+type: module
+description: 'Intégration des flux Apidae dans le CMS Drupal.'
+core: 8.x
+package: Custom
+configure: apidae.config

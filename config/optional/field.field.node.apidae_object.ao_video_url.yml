@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_video_url
+    - node.type.apidae_object
+id: node.apidae_object.ao_video_url
+field_name: ao_video_url
+entity_type: node
+bundle: apidae_object
+label: URL de la vidéo
+description: "Adresse web de la vidéo"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: string

@@ -1,0 +1,18 @@
+langcode: fr
+status: true
+dependencies:
+  module:
+    - apidae_drupal_module
+id: node.apidae_object.ao_video_title
+field_name: ao_video_title
+entity_type: node
+type: string
+settings:
+  case_sensitive: false
+module: apidae_drupal_module
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

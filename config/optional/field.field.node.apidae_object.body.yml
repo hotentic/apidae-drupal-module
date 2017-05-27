@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.apidae_object
+id: node.apidae_object.body
+field_name: body
+entity_type: node
+bundle: apidae_object
+label: Contenu
+description: "Descriptif"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+field_type: text_with_summary

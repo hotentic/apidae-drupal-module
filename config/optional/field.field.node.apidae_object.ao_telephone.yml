@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_telephone
+    - node.type.apidae_object
+id: node.apidae_object.ao_telephone
+field_name: ao_telephone
+entity_type: node
+bundle: apidae_object
+label: Téléphone
+description: "Téléphone"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: string

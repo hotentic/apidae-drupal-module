@@ -1,0 +1,14 @@
+apidae.config:
+  path: '/admin/config/system/apidae'
+  defaults:
+    _form: '\Drupal\apidae_drupal_module\Form\ApidaeSettingsForm'
+    _title: 'Paramétrages Apidae'
+  requirements:
+    _permission: 'administer apidae'
+apidae.import:
+  path: '/admin/apidae/import'
+  defaults:
+    _controller: '\Drupal\apidae_drupal_module\Controller\ApidaeController::import'
+    _title: 'Objets touristiques Apidae'
+  requirements:
+    _permission: 'administer apidae'
