@@ -1,9 +1,0 @@
-Drupal 8 = Guzzle 6+
-Sitra PHP updated but broken in latest master
-Guzzle 5 -> 6 involves important changes in the requests preprocessing
-
-Fixes so far :
-Removed some operations that would cause WSOD
-Replaced postField by formParam in Search operations
-Commented stuff in SitraException since signature should have changed
-Added apikey and projectId directly in searchObjects call of ApidaeController

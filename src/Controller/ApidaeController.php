@@ -3,7 +3,6 @@
 namespace Drupal\apidae_drupal_module\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Language\Language;
 use Drupal\node\Entity\Node;
 use Sitra\ApiClient\Exception\SitraException;
 use Sitra\ApiClient\SitraServiceClient;
@@ -20,11 +19,8 @@ class ApidaeController extends ControllerBase {
     $apiProject = $apidaeConfig->get('api.project');
     $selections =  $apidaeConfig->get('data.selections');
     $objectsTypes =  array_filter($apidaeConfig->get('data.types'));
-
-    \Drupal::logger('Apidae')->info('config ok');
-
+    $typesCriteria = join(" ", array_map(function($t) { return "type:".$t; }, $objectsTypes));
     $selections_ids = array_map('intval', explode(',', (string)$selections));
-    \Drupal::logger('Apidae')->info('selections ids ok');
 
     $client = $this->createClient($apiUrl, $apiKey, $apiProject);
 
@@ -33,15 +29,14 @@ class ApidaeController extends ControllerBase {
     \Drupal::logger('Apidae')->info('Client created');
 
     if($client) {
-      foreach ($objectsTypes as $objType) {
-        \Drupal::logger('Apidae')->info('Importing data for type : '.$objType);
+      foreach ($selections_ids as $selection) {
         try {
           $results = $client->searchObject([
             'query' => [
               "apiKey" => $apiKey,
               "projetId" => $apiProject,
-              "selectionIds" => $selections_ids,
-              "criteresQuery" => "type:" . $objType,
+              "selectionIds" => [$selection],
+              "criteresQuery" => $typesCriteria,
               "responseFields" => ["id", "nom", "illustrations", "multimedias", "informations", "presentation",
                 "localisation", "@informationsObjetTouristique", "ouverture.periodeEnClair",
                 "ouverture.periodesOuvertures", "descriptionTarif.tarifsEnClair.LibelleFr", "contacts"]
@@ -52,8 +47,7 @@ class ApidaeController extends ControllerBase {
             $i = count($results['objetsTouristiques']);
             $objectsCount += $i;
             foreach ($results['objetsTouristiques'] as $result) {
-              \Drupal::logger('Apidae result')->info('test');
-              $this->createNode($result);
+              $this->createNode($result, $selection);
             }
           }
         } catch(SitraException $e) {
@@ -88,11 +82,13 @@ class ApidaeController extends ControllerBase {
 
   private function checkNodeExists($id) {
     $result = null;
-    $nodes = node_load_multiple(array(), array('type' => 'apidae_object'));
-    foreach ($nodes as $value) {
-      if (isset($value->ao_id) && ($value->ao_id['und'][0]['value'] == $id)) {
-        $result = $value->nid;
-      }
+    $nids = \Drupal::entityQuery('node')
+      ->condition('type', 'apidae_object', '=')
+      ->condition('ao_id', $id, '=')
+      ->execute();
+
+    if(count($nids) > 0) {
+      $result = array_keys($nids)[0];
     }
     return $result;
   }
@@ -111,17 +107,16 @@ class ApidaeController extends ControllerBase {
     return $node;
   }
 
-  private function createNode($content)
+  private function createNode($content, $selection)
   {
     $refreshMode = $this->config('system.apidae')->get('cron.type');
     $contentId = $content['id'];
     $nid = $this->checkNodeExists($contentId);
-    $lang = Language::LANGCODE_NOT_SPECIFIED;
 
-    if (is_null($nid) || (!is_null($nid) && $refreshMode == 'new_content_and_updates')) {
+    if (is_null($nid) || $refreshMode == 'new_content_and_updates') {
 
-      //if node doesn't exist or if it exists and could not load it
       if (is_null($nid) || (!($node = node_load($nid)))) {
+        \Drupal::logger('Apidae')->info('node missing');
         $node = $this->createApidaeObject();
       }
 
@@ -154,6 +149,16 @@ class ApidaeController extends ControllerBase {
 //      $type = $content['type'];
 //      $tid = _get_tid_from_type($type);
 //      $node->ao_type['und'][0] = array('tid' => $tid);
+
+      // matched selections
+      $selectionKey = "(".$selection.")";
+      $selections = $node->ao_selections->value;
+      $selections = isset($selections) ? explode(',', $selections) : array();
+
+      if(!in_array($selectionKey, $selections)) {
+        array_push($selections, $selectionKey);
+        $node->set('ao_selections', join(',', $selections));
+      }
 
       // location data
       if (isset($content['localisation']['adresse']['adresse1'])) {

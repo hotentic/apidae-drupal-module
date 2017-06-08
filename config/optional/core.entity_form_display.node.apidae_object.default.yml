@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.apidae_object.ao_id
     - field.field.node.apidae_object.body
     - field.field.node.apidae_object.ao_type
+    - field.field.node.apidae_object.ao_selections
     - field.field.node.apidae_object.ao_address1
     - field.field.node.apidae_object.ao_address2
     - field.field.node.apidae_object.ao_address3
@@ -47,6 +48,12 @@ content:
     settings: {  }
     third_party_settings: {  }
   ao_type:
+    label: hidden
+    type: string_textfield
+    weight: 102
+    settings: {  }
+    third_party_settings: {  }
+  ao_selections:
     label: hidden
     type: string_textfield
     weight: 102
@@ -120,7 +127,7 @@ content:
     third_party_settings: {  }
   ao_short_desc:
     label: hidden
-    type: string_textfield
+    type: text_textarea
     weight: 114
     settings: {  }
     third_party_settings: {  }
@@ -174,13 +181,13 @@ content:
     third_party_settings: {  }
   ao_openings:
     label: hidden
-    type: string_textfield
+    type: text_textarea
     weight: 123
     settings: {  }
     third_party_settings: {  }
   ao_rates:
     label: hidden
-    type: string_textfield
+    type: text_textarea
     weight: 124
     settings: {  }
     third_party_settings: {  }
