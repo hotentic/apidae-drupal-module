@@ -63,14 +63,12 @@ class ApidaeController extends ControllerBase {
 
   private function createClient($url, $key, $id) {
     try {
-      \Drupal::logger('Apidae')->info('before client');
       $client = new SitraServiceClient([
         'baseUri' => $url,
         'apiKey' => $key,
         'projectId' => $id,
         'count' => 100,
       ]);
-      \Drupal::logger('Apidae')->info('after client');
 
       return $client;
     } catch (SitraException $e) {
@@ -138,13 +136,6 @@ class ApidaeController extends ControllerBase {
         'summary' => isset($content['presentation']['descriptifCourt']['libelleFr']) ? $content['presentation']['descriptifCourt']['libelleFr'] : text_summary(nl2br($complaint_body))
       ));
 
-//      if (isset($content['presentation']['descriptifCourt']['libelleFr'])) {
-//        $node->body->summary = $content['presentation']['descriptifCourt']['libelleFr'];
-//      } else {
-//        $node->body->summary = text_summary(nl2br($complaint_body));
-//      }
-//      $node->body->format = 'full_html';
-
       // todo : setup yaml-based taxonomy (see https://www.metaltoad.com/blog/drupal-8-migrations-part-3-migrating-taxonomies-drupal-7)
 //      $type = $content['type'];
 //      $tid = _get_tid_from_type($type);
@@ -162,19 +153,19 @@ class ApidaeController extends ControllerBase {
 
       // location data
       if (isset($content['localisation']['adresse']['adresse1'])) {
-        $node->set('ao_address1', nl2br($content['localisation']['adresse']['adresse1']));
+        $node->set('ao_address1', $content['localisation']['adresse']['adresse1']);
       }
       if (isset($content['localisation']['adresse']['adresse2'])) {
-        $node->set('ao_address2', nl2br($content['localisation']['adresse']['adresse2']));
+        $node->set('ao_address2', $content['localisation']['adresse']['adresse2']);
       }
       if (isset($content['localisation']['adresse']['adresse3'])) {
-        $node->set('ao_address3', nl2br($content['localisation']['adresse']['adresse3']));
+        $node->set('ao_address3', $content['localisation']['adresse']['adresse3']);
       }
       if (isset($content['localisation']['adresse']['codePostal'])) {
         $node->set('ao_postal_code', $content['localisation']['adresse']['codePostal']);
       }
       if (isset($content['localisation']['adresse']['commune']['nom'])) {
-        $node->set('ao_town', nl2br($content['localisation']['adresse']['commune']['nom']));
+        $node->set('ao_town', $content['localisation']['adresse']['commune']['nom']);
       }
       if (isset($content['localisation']['geolocalisation']['geoJson']['coordinates']['0'])) {
         $node->set('ao_latitude', $content['localisation']['geolocalisation']['geoJson']['coordinates']['1']);
@@ -245,11 +236,11 @@ class ApidaeController extends ControllerBase {
       }
 
       if (isset($content['ouverture']['periodeEnClair']['libelleFr'])) {
-        $node->set('ao_openings', nl2br($content['ouverture']['periodeEnClair']['libelleFr']));
+        $node->set('ao_openings', $content['ouverture']['periodeEnClair']['libelleFr']);
       }
 
       if (isset($content['descriptionTarif']['tarifsEnClair']['libelleFr'])) {
-        $node->set('ao_rates', nl2br($content['descriptionTarif']['tarifsEnClair']['libelleFr']));
+        $node->set('ao_rates', $content['descriptionTarif']['tarifsEnClair']['libelleFr']);
       }
 
       $node->save();
