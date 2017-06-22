@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ApidaeController extends ControllerBase {
 
   public function import() {
-    \Drupal::logger('Apidae')->info('Importing Apidae data');
+    \Drupal::logger('Apidae')->info('Importing Apidae data - v1.1');
 
     $apidaeConfig = $this->config('system.apidae');
     $apiUrl = $apidaeConfig->get('api.url');
@@ -43,11 +43,16 @@ class ApidaeController extends ControllerBase {
             ]
           ]);
 
+          $refreshMode = $this->config('system.apidae')->get('cron.type');
+          \Drupal::logger('Apidae')->info("Refresh mode set to ".$results['numFound']);
+
+          \Drupal::logger('Apidae')->info("Search query - found ".$results['numFound']." entries");
+
           if (isset($results['objetsTouristiques'])) {
             $i = count($results['objetsTouristiques']);
             $objectsCount += $i;
             foreach ($results['objetsTouristiques'] as $result) {
-              $this->createNode($result, $selection);
+              $this->createNode($result, $selection, $refreshMode);
             }
           }
         } catch(SitraException $e) {
@@ -105,9 +110,8 @@ class ApidaeController extends ControllerBase {
     return $node;
   }
 
-  private function createNode($content, $selection)
+  private function createNode($content, $selection, $refreshMode)
   {
-    $refreshMode = $this->config('system.apidae')->get('cron.type');
     $contentId = $content['id'];
     $nid = $this->checkNodeExists($contentId);
 
@@ -135,6 +139,7 @@ class ApidaeController extends ControllerBase {
         'format' => 'full_html',
         'summary' => isset($content['presentation']['descriptifCourt']['libelleFr']) ? $content['presentation']['descriptifCourt']['libelleFr'] : text_summary(nl2br($complaint_body))
       ));
+      $node->set('ao_type', $content['type']);
 
       // todo : setup yaml-based taxonomy (see https://www.metaltoad.com/blog/drupal-8-migrations-part-3-migrating-taxonomies-drupal-7)
 //      $type = $content['type'];
