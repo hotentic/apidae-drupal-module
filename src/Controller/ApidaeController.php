@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApidaeController extends ControllerBase {
 
+  const BATCH_SIZE = 10;
+  const MAX_CYCLES = 20;
+
   public function import() {
     \Drupal::logger('Apidae')->info('Importing Apidae data - v1.1');
 
@@ -24,46 +27,63 @@ class ApidaeController extends ControllerBase {
 
     $client = $this->createClient($apiUrl, $apiKey, $apiProject);
 
-    $objectsCount = 0;
-
     \Drupal::logger('Apidae')->info('Client created');
 
     if($client) {
       foreach ($selections_ids as $selection) {
+        $refreshMode = $this->config('system.apidae')->get('cron.type');
+        $objectsCount = 0;
+        $cycles = 0;
+        $all_objects = [];
+
         try {
-          $results = $client->searchObject([
-            'query' => [
-              "apiKey" => $apiKey,
-              "projetId" => $apiProject,
-              "selectionIds" => [$selection],
-              "criteresQuery" => $typesCriteria,
-              "responseFields" => ["id", "nom", "illustrations", "multimedias", "informations", "presentation",
-                "localisation", "@informationsObjetTouristique", "ouverture.periodeEnClair",
-                "ouverture.periodesOuvertures", "descriptionTarif.tarifsEnClair.LibelleFr", "contacts"]
-            ]
-          ]);
-
-          $refreshMode = $this->config('system.apidae')->get('cron.type');
-          \Drupal::logger('Apidae')->info("Refresh mode set to ".$refreshMode);
-
-          \Drupal::logger('Apidae')->info("Search query - found ".$results['numFound']." entries");
-
+          $results = $this->loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $objectsCount);
           if (isset($results['objetsTouristiques'])) {
             $i = count($results['objetsTouristiques']);
             $objectsCount += $i;
-            foreach ($results['objetsTouristiques'] as $result) {
-              $this->createNode($result, $selection, $refreshMode);
+            $cycles += 1;
+            $all_objects += $results['objetsTouristiques'];
+          }
+          while($objectsCount < $results['numFound'] && $cycles < self::MAX_CYCLES) {
+            $results = $this->loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $objectsCount);
+            if (isset($results['objetsTouristiques'])) {
+              $i = count($results['objetsTouristiques']);
+              $objectsCount += $i;
+              $cycles += 1;
+              $all_objects += $results['objetsTouristiques'];
             }
+          }
+
+          foreach ($all_objects as $touristic_object) {
+            $this->createNode($touristic_object, $selection, $refreshMode);
           }
         } catch(SitraException $e) {
           \Drupal::logger('Apidae module')->error('An error occurred during the retrieval of Apidae data. Please make sure that all configuration values have been properly set.');
           \Drupal::logger('Apidae module')->error($e->getMessage());
         }
+        \Drupal::logger('Apidae module')->info('%d objects updated/created successfully', array('%d' => $objectsCount));
       }
-      \Drupal::logger('Apidae module')->info('%d objects updated/created successfully', array('%d' => $objectsCount));
     }
 
     return new Response('', 204);
+  }
+
+  private function loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $offset) {
+    $results =  $client->searchObject([
+      'query' => [
+        "apiKey" => $apiKey,
+        "projetId" => $apiProject,
+        "first" => $offset,
+        "selectionIds" => [$selection],
+        "criteresQuery" => $typesCriteria,
+        "responseFields" => ["id", "nom", "illustrations", "multimedias", "informations", "presentation",
+          "localisation", "@informationsObjetTouristique", "ouverture.periodeEnClair",
+          "ouverture.periodesOuvertures", "descriptionTarif.tarifsEnClair.LibelleFr", "contacts"]
+      ]
+    ]);
+    \Drupal::logger('Apidae query')->info("Retrieved objects ".$offset." to ".($offset + count($results['objetsTouristiques']))." in total of ".$results['numFound']);
+
+    return $results;
   }
 
   private function createClient($url, $key, $id) {
@@ -72,7 +92,7 @@ class ApidaeController extends ControllerBase {
         'baseUri' => $url,
         'apiKey' => $key,
         'projectId' => $id,
-        'count' => 100,
+        'count' => self::BATCH_SIZE,
       ]);
 
       return $client;
