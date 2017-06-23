@@ -37,25 +37,24 @@ class ApidaeController extends ControllerBase {
         $all_objects = [];
 
         try {
+          \Drupal::logger('Apidae query')->info("Selection ".$selection." - cycle ".$cycles." - ".count($all_objects)." objects");
           $results = $this->loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $objectsCount);
           if (isset($results['objetsTouristiques'])) {
-            $i = count($results['objetsTouristiques']);
-            $objectsCount += $i;
+            $objectsCount += count($results['objetsTouristiques']);
             $cycles += 1;
             $all_objects += $results['objetsTouristiques'];
           }
-          \Drupal::logger('Apidae query')->info("Selection ".$selection." - cycle ".$cycles." - ". $objectsCount ." objects - ".count($all_objects)." total");
 
           while($objectsCount < $results['numFound'] && $cycles < self::MAX_CYCLES) {
+            \Drupal::logger('Apidae query')->info("Selection ".$selection." - cycle ".$cycles." - ".count($all_objects)." objects");
             $results = $this->loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $objectsCount);
             if (isset($results['objetsTouristiques'])) {
-              $i = count($results['objetsTouristiques']);
-              $objectsCount += $i;
+              $objectsCount += count($results['objetsTouristiques']);
               $cycles += 1;
               $all_objects += $results['objetsTouristiques'];
             }
-            \Drupal::logger('Apidae query')->info("Selection ".$selection." - cycle ".$cycles." - ". $objectsCount ." objects - ".count($all_objects)." total");
           }
+          \Drupal::logger('Apidae query')->info("Selection ".$selection." - Retrieved ".count($all_objects)." objects");
 
           foreach ($all_objects as $touristic_object) {
             $this->createNode($touristic_object, $selection, $refreshMode);
