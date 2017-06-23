@@ -104,7 +104,6 @@ class ApidaeController extends ControllerBase {
       ->condition('type', 'apidae_object', '=')
       ->condition('ao_id', $id, '=')
       ->execute();
-    \Drupal::logger('check node')->info("check node exists for ".$id." : ".print_r($nids, true));
 
     if(count($nids) > 0) {
       $result = array_values($nids)[0];
@@ -134,10 +133,8 @@ class ApidaeController extends ControllerBase {
     if (is_null($nid) || $refreshMode == 'new_content_and_updates') {
 
       if (is_null($nid)) {
-        \Drupal::logger('Apidae')->info('node missing');
         $node = $this->createApidaeObject();
       } else {
-        \Drupal::logger('Apidae')->info('updating existing node '.$nid);
         $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
       }
       if(!is_null($node)) {
