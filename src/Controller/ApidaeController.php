@@ -89,6 +89,7 @@ class ApidaeController extends ControllerBase {
       ->condition('type', 'apidae_object', '=')
       ->condition('ao_id', $id, '=')
       ->execute();
+    \Drupal::logger('check node')->info("check node exists for ".$id." : ".print_r($nids, true));
 
     if(count($nids) > 0) {
       $result = array_keys($nids)[0];
