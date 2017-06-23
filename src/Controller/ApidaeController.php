@@ -44,6 +44,8 @@ class ApidaeController extends ControllerBase {
             $cycles += 1;
             $all_objects += $results['objetsTouristiques'];
           }
+          \Drupal::logger('Apidae query')->info("Selection ".$selection." - cycle ".$cycles." - ". $objectsCount ." objects - ".$all_objects." total");
+
           while($objectsCount < $results['numFound'] && $cycles < self::MAX_CYCLES) {
             $results = $this->loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $objectsCount);
             if (isset($results['objetsTouristiques'])) {
@@ -52,6 +54,7 @@ class ApidaeController extends ControllerBase {
               $cycles += 1;
               $all_objects += $results['objetsTouristiques'];
             }
+            \Drupal::logger('Apidae query')->info("Selection ".$selection." - cycle ".$cycles." - ". $objectsCount ." objects - ".$all_objects." total");
           }
 
           foreach ($all_objects as $touristic_object) {
@@ -144,7 +147,6 @@ class ApidaeController extends ControllerBase {
       } else {
         \Drupal::logger('Apidae')->info('updating existing node '.$nid);
         $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
-        // Todo : check that duplicates are gone - complete pagination - test module update - add fields
       }
       if(!is_null($node)) {
         if (isset($content['presentation']['descriptifDetaille']['libelleFr'])) {
