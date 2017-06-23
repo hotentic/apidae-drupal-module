@@ -1,3 +1,9 @@
+<?php
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Symfony\Component\Yaml\Yaml;
+
 /**
 * Adding privdesc1 field to touristic objects
 */
