@@ -126,132 +126,133 @@ class ApidaeController extends ControllerBase {
         $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
         // Todo : check that duplicates are gone - complete pagination - test module update - add fields
       }
+      if(!is_null($node)) {
+        if (isset($content['presentation']['descriptifDetaille']['libelleFr'])) {
+          $complaint_body = $content['presentation']['descriptifDetaille']['libelleFr'];
+        } elseif (isset($content['presentation']['descriptifCourt']['libelleFr'])) {
+          $complaint_body = $content['presentation']['descriptifCourt']['libelleFr'];
+        } else {
+          $complaint_body = '';
+        }
 
-      if (isset($content['presentation']['descriptifDetaille']['libelleFr'])) {
-        $complaint_body = $content['presentation']['descriptifDetaille']['libelleFr'];
-      } elseif (isset($content['presentation']['descriptifCourt']['libelleFr'])) {
-        $complaint_body = $content['presentation']['descriptifCourt']['libelleFr'];
-      } else {
-        $complaint_body = '';
-      }
+        $node->set('ao_id', $contentId);
+        $node->setTitle($content['nom']['libelleFr']);
+        $node->set('body', array(
+          'value' => nl2br($complaint_body),
+          'format' => 'full_html',
+          'summary' => isset($content['presentation']['descriptifCourt']['libelleFr']) ? $content['presentation']['descriptifCourt']['libelleFr'] : text_summary(nl2br($complaint_body))
+        ));
+        $node->set('ao_type', $content['type']);
 
-      $node->set('ao_id', $contentId);
-      $node->setTitle($content['nom']['libelleFr']);
-      $node->set('body', array(
-        'value' => nl2br($complaint_body),
-        'format' => 'full_html',
-        'summary' => isset($content['presentation']['descriptifCourt']['libelleFr']) ? $content['presentation']['descriptifCourt']['libelleFr'] : text_summary(nl2br($complaint_body))
-      ));
-      $node->set('ao_type', $content['type']);
+        // todo : setup yaml-based taxonomy (see https://www.metaltoad.com/blog/drupal-8-migrations-part-3-migrating-taxonomies-drupal-7)
+        //      $type = $content['type'];
+        //      $tid = _get_tid_from_type($type);
+        //      $node->ao_type['und'][0] = array('tid' => $tid);
 
-      // todo : setup yaml-based taxonomy (see https://www.metaltoad.com/blog/drupal-8-migrations-part-3-migrating-taxonomies-drupal-7)
-//      $type = $content['type'];
-//      $tid = _get_tid_from_type($type);
-//      $node->ao_type['und'][0] = array('tid' => $tid);
+        // matched selections
+        $selectionKey = "(".$selection.")";
+        $selections = $node->ao_selections->value;
+        $selections = isset($selections) ? explode(',', $selections) : array();
 
-      // matched selections
-      $selectionKey = "(".$selection.")";
-      $selections = $node->ao_selections->value;
-      $selections = isset($selections) ? explode(',', $selections) : array();
+        if(!in_array($selectionKey, $selections)) {
+          array_push($selections, $selectionKey);
+          $node->set('ao_selections', join(',', $selections));
+        }
 
-      if(!in_array($selectionKey, $selections)) {
-        array_push($selections, $selectionKey);
-        $node->set('ao_selections', join(',', $selections));
-      }
+        // location data
+        if (isset($content['localisation']['adresse']['adresse1'])) {
+          $node->set('ao_address1', $content['localisation']['adresse']['adresse1']);
+        }
+        if (isset($content['localisation']['adresse']['adresse2'])) {
+          $node->set('ao_address2', $content['localisation']['adresse']['adresse2']);
+        }
+        if (isset($content['localisation']['adresse']['adresse3'])) {
+          $node->set('ao_address3', $content['localisation']['adresse']['adresse3']);
+        }
+        if (isset($content['localisation']['adresse']['codePostal'])) {
+          $node->set('ao_postal_code', $content['localisation']['adresse']['codePostal']);
+        }
+        if (isset($content['localisation']['adresse']['commune']['nom'])) {
+          $node->set('ao_town', $content['localisation']['adresse']['commune']['nom']);
+        }
+        if (isset($content['localisation']['geolocalisation']['geoJson']['coordinates']['0'])) {
+          $node->set('ao_latitude', $content['localisation']['geolocalisation']['geoJson']['coordinates']['1']);
+        }
+        if (isset($content['localisation']['geolocalisation']['geoJson']['coordinates']['1'])) {
+          $node->set('ao_longitude', $content['localisation']['geolocalisation']['geoJson']['coordinates']['0']);
+        }
 
-      // location data
-      if (isset($content['localisation']['adresse']['adresse1'])) {
-        $node->set('ao_address1', $content['localisation']['adresse']['adresse1']);
-      }
-      if (isset($content['localisation']['adresse']['adresse2'])) {
-        $node->set('ao_address2', $content['localisation']['adresse']['adresse2']);
-      }
-      if (isset($content['localisation']['adresse']['adresse3'])) {
-        $node->set('ao_address3', $content['localisation']['adresse']['adresse3']);
-      }
-      if (isset($content['localisation']['adresse']['codePostal'])) {
-        $node->set('ao_postal_code', $content['localisation']['adresse']['codePostal']);
-      }
-      if (isset($content['localisation']['adresse']['commune']['nom'])) {
-        $node->set('ao_town', $content['localisation']['adresse']['commune']['nom']);
-      }
-      if (isset($content['localisation']['geolocalisation']['geoJson']['coordinates']['0'])) {
-        $node->set('ao_latitude', $content['localisation']['geolocalisation']['geoJson']['coordinates']['1']);
-      }
-      if (isset($content['localisation']['geolocalisation']['geoJson']['coordinates']['1'])) {
-        $node->set('ao_longitude', $content['localisation']['geolocalisation']['geoJson']['coordinates']['0']);
-      }
-
-      // contact info
-      if (isset($content['informations']['moyensCommunication'])) {
-        foreach ($content['informations']['moyensCommunication'] as $key => $value) {
-          switch ($value['type']['id']) {
-            case '201' :
-              $node->set('ao_telephone', $value['coordonnees']['fr']);
-              break;
-            case '204' :
-              $node->set('ao_email', $value['coordonnees']['fr']);
-              break;
-            case '205' :
-              $node->set('ao_website', $value['coordonnees']['fr']);
-              break;
-            case '207' :
-              $node->set('ao_facebook', $value['coordonnees']['fr']);
-              break;
-            default :
-              break;
+        // contact info
+        if (isset($content['informations']['moyensCommunication'])) {
+          foreach ($content['informations']['moyensCommunication'] as $key => $value) {
+            switch ($value['type']['id']) {
+              case '201' :
+                $node->set('ao_telephone', $value['coordonnees']['fr']);
+                break;
+              case '204' :
+                $node->set('ao_email', $value['coordonnees']['fr']);
+                break;
+              case '205' :
+                $node->set('ao_website', $value['coordonnees']['fr']);
+                break;
+              case '207' :
+                $node->set('ao_facebook', $value['coordonnees']['fr']);
+                break;
+              default :
+                break;
+            }
           }
         }
-      }
 
-      if (isset($content['presentation']['descriptifCourt']['libelleFr'])) {
-        $node->set('ao_short_desc', nl2br($content['presentation']['descriptifCourt']['libelleFr']));
-      }
+        if (isset($content['presentation']['descriptifCourt']['libelleFr'])) {
+          $node->set('ao_short_desc', nl2br($content['presentation']['descriptifCourt']['libelleFr']));
+        }
 
-      // first picture fields
-      if (isset($content['illustrations'][0]['traductionFichiers'][0]['url'])) {
-        $node->set('ao_pic1_large', $content['illustrations'][0]['traductionFichiers'][0]['url']);
-      }
-      if (isset($content['illustrations'][0]['traductionFichiers'][0]['urlDiaporama'])) {
-        $node->set('ao_pic1_medium', $content['illustrations'][0]['traductionFichiers'][0]['urlDiaporama']);
-      }
-      if (isset($content['illustrations'][0]['nom']['libelleFr'])) {
-        $node->set('ao_pic1_title', $content['illustrations'][0]['nom']['libelleFr']);
-      }
-      if (isset($content['illustrations'][0]['copyright']['libelleFr'])) {
-        $node->set('ao_pic1_credits', $content['illustrations'][0]['copyright']['libelleFr']);
-      }
+        // first picture fields
+        if (isset($content['illustrations'][0]['traductionFichiers'][0]['url'])) {
+          $node->set('ao_pic1_large', $content['illustrations'][0]['traductionFichiers'][0]['url']);
+        }
+        if (isset($content['illustrations'][0]['traductionFichiers'][0]['urlDiaporama'])) {
+          $node->set('ao_pic1_medium', $content['illustrations'][0]['traductionFichiers'][0]['urlDiaporama']);
+        }
+        if (isset($content['illustrations'][0]['nom']['libelleFr'])) {
+          $node->set('ao_pic1_title', $content['illustrations'][0]['nom']['libelleFr']);
+        }
+        if (isset($content['illustrations'][0]['copyright']['libelleFr'])) {
+          $node->set('ao_pic1_credits', $content['illustrations'][0]['copyright']['libelleFr']);
+        }
 
-      if (isset($content['multimedias'])) {
-        foreach ($content['multimedias'] as $key => $value) {
-          switch ($value['type']) {
-            case 'VIDEO' :
-              $node->set('ao_video_url', $value['traductionFichiers']['0']['url']);
-              if (isset($value['nom']['libelleFr'])) {
-                $node->set('ao_video_title', $value['nom']['libelleFr']);
-              }
-              break;
-            case 'DOCUMENT' :
-              if (strpos($value['traductionFichiers'][0]['url'], 'pdf')) {
-                $node->set('ao_pdf_url', $value['traductionFichiers'][0]['url']);
+        if (isset($content['multimedias'])) {
+          foreach ($content['multimedias'] as $key => $value) {
+            switch ($value['type']) {
+              case 'VIDEO' :
+                $node->set('ao_video_url', $value['traductionFichiers']['0']['url']);
                 if (isset($value['nom']['libelleFr'])) {
-                  $node->set('ao_pdf_title', $value['nom']['libelleFr']);
+                  $node->set('ao_video_title', $value['nom']['libelleFr']);
                 }
                 break;
-              }
+              case 'DOCUMENT' :
+                if (strpos($value['traductionFichiers'][0]['url'], 'pdf')) {
+                  $node->set('ao_pdf_url', $value['traductionFichiers'][0]['url']);
+                  if (isset($value['nom']['libelleFr'])) {
+                    $node->set('ao_pdf_title', $value['nom']['libelleFr']);
+                  }
+                  break;
+                }
+            }
           }
         }
-      }
 
-      if (isset($content['ouverture']['periodeEnClair']['libelleFr'])) {
-        $node->set('ao_openings', $content['ouverture']['periodeEnClair']['libelleFr']);
-      }
+        if (isset($content['ouverture']['periodeEnClair']['libelleFr'])) {
+          $node->set('ao_openings', $content['ouverture']['periodeEnClair']['libelleFr']);
+        }
 
-      if (isset($content['descriptionTarif']['tarifsEnClair']['libelleFr'])) {
-        $node->set('ao_rates', $content['descriptionTarif']['tarifsEnClair']['libelleFr']);
-      }
+        if (isset($content['descriptionTarif']['tarifsEnClair']['libelleFr'])) {
+          $node->set('ao_rates', $content['descriptionTarif']['tarifsEnClair']['libelleFr']);
+        }
 
-      $node->save();
+        $node->save();
+      }
     }
   }
 }
