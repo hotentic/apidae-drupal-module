@@ -73,7 +73,8 @@ class ApidaeController extends ControllerBase {
         "criteresQuery" => $typesCriteria,
         "responseFields" => ["id", "nom", "illustrations", "multimedias", "informations", "presentation",
           "localisation", "@informationsObjetTouristique", "ouverture.periodeEnClair",
-          "ouverture.periodesOuvertures", "descriptionTarif.tarifsEnClair.LibelleFr", "contacts"]
+          "ouverture.periodesOuvertures", "descriptionTarif.tarifsEnClair.libelleFr", "contacts",
+          "donneesPrivees"]
       ]
     ]);
     \Drupal::logger('Apidae query')->info("Retrieved ".count($results['objetsTouristiques'])." objects starting from ".$offset." for a total of ".$results['numFound']);
@@ -260,6 +261,14 @@ class ApidaeController extends ControllerBase {
 
         if (isset($content['descriptionTarif']['tarifsEnClair']['libelleFr'])) {
           $node->set('ao_rates', $content['descriptionTarif']['tarifsEnClair']['libelleFr']);
+        }
+
+        // Descriptifs prives
+        if (isset($content['donneesPrivees'])) {
+          foreach ($content['donneesPrivees'] as $key => $value) {
+            \Drupal::logger('Apidae')->info("donneesPrivees key : ".$key);
+            $node->set('ao_privdesc1', $value['descriptif']);
+          }
         }
 
         $node->save();
