@@ -91,7 +91,6 @@ class ApidaeController extends ControllerBase {
       ->execute();
 
     if(count($nids) > 0) {
-      \Drupal::logger('Apidae')->info('checkNodeExists : '.$nids);
       $result = array_keys($nids)[0];
     }
     return $result;
@@ -252,6 +251,10 @@ class ApidaeController extends ControllerBase {
         }
 
         $node->save();
+      } else {
+        if (!is_null($nid)) {
+          \Drupal::logger('Apidae')->warning('Could not retrieve '.$nid);
+        }
       }
     }
   }
