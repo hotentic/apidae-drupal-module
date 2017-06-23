@@ -44,7 +44,7 @@ class ApidaeController extends ControllerBase {
           ]);
 
           $refreshMode = $this->config('system.apidae')->get('cron.type');
-          \Drupal::logger('Apidae')->info("Refresh mode set to ".$results['numFound']);
+          \Drupal::logger('Apidae')->info("Refresh mode set to ".$refreshMode);
 
           \Drupal::logger('Apidae')->info("Search query - found ".$results['numFound']." entries");
 
@@ -117,13 +117,15 @@ class ApidaeController extends ControllerBase {
 
     if (is_null($nid) || $refreshMode == 'new_content_and_updates') {
 
-      if (is_null($nid) || (!($node = node_load($nid)))) {
+      if (is_null($nid)) {
         \Drupal::logger('Apidae')->info('node missing');
         $node = $this->createApidaeObject();
+      } else {
+        \Drupal::logger('Apidae')->info('updating existing node '.$nid);
+        $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+        // Todo : check that duplicates are gone - complete pagination - test module update - add fields
       }
 
-      //todo : check the field value to see if it was updated on apidae, and update the field only if it was
-      //General fields
       if (isset($content['presentation']['descriptifDetaille']['libelleFr'])) {
         $complaint_body = $content['presentation']['descriptifDetaille']['libelleFr'];
       } elseif (isset($content['presentation']['descriptifCourt']['libelleFr'])) {
