@@ -44,7 +44,7 @@ class ApidaeController extends ControllerBase {
             $cycles += 1;
             $all_objects += $results['objetsTouristiques'];
           }
-          \Drupal::logger('Apidae query')->info("Selection ".$selection." - cycle ".$cycles." - ". $objectsCount ." objects - ".$all_objects." total");
+          \Drupal::logger('Apidae query')->info("Selection ".$selection." - cycle ".$cycles." - ". $objectsCount ." objects - ".count($all_objects)." total");
 
           while($objectsCount < $results['numFound'] && $cycles < self::MAX_CYCLES) {
             $results = $this->loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $objectsCount);
