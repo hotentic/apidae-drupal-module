@@ -91,6 +91,7 @@ class ApidaeController extends ControllerBase {
       ->execute();
 
     if(count($nids) > 0) {
+      \Drupal::logger('Apidae')->info('checkNodeExists : '.$nids);
       $result = array_keys($nids)[0];
     }
     return $result;
