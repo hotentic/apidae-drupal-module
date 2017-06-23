@@ -35,22 +35,14 @@ class ApidaeController extends ControllerBase {
         $objectsCount = 0;
         $cycles = 0;
         $all_objects = [];
+        $results = array();
 
         try {
-          \Drupal::logger('Apidae query')->info("Selection ".$selection." - cycle ".$cycles." - ".count($all_objects)." objects");
-          $results = $this->loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $objectsCount);
-          if (isset($results['objetsTouristiques'])) {
-            $objectsCount += count($results['objetsTouristiques']);
-            $cycles += 1;
-            $all_objects = array_merge($all_objects, array_values($results['objetsTouristiques']));
-          }
-
-          while($objectsCount < $results['numFound'] && $cycles < self::MAX_CYCLES) {
-            \Drupal::logger('Apidae query')->info("Selection ".$selection." - cycle ".$cycles." - ".count($all_objects)." objects");
+          while(($cycles == 0 || $objectsCount < $results['numFound']) && $cycles < self::MAX_CYCLES) {
             $results = $this->loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $objectsCount);
+            $cycles += 1;
             if (isset($results['objetsTouristiques'])) {
               $objectsCount += count($results['objetsTouristiques']);
-              $cycles += 1;
               $all_objects = array_merge($all_objects, array_values($results['objetsTouristiques']));
             }
           }
@@ -59,11 +51,12 @@ class ApidaeController extends ControllerBase {
           foreach ($all_objects as $touristic_object) {
             $this->createNode($touristic_object, $selection, $refreshMode);
           }
+          \Drupal::logger('Apidae module')->info('%d objects updated/created successfully', array('%d' => $objectsCount));
+
         } catch(SitraException $e) {
           \Drupal::logger('Apidae module')->error('An error occurred during the retrieval of Apidae data. Please make sure that all configuration values have been properly set.');
           \Drupal::logger('Apidae module')->error($e->getMessage());
         }
-        \Drupal::logger('Apidae module')->info('%d objects updated/created successfully', array('%d' => $objectsCount));
       }
     }
 
