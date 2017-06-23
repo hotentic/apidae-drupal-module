@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApidaeController extends ControllerBase {
 
-  const BATCH_SIZE = 10;
+  const BATCH_SIZE = 50;
   const MAX_CYCLES = 20;
 
   public function import() {
