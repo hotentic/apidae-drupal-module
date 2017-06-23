@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_privdesc2
+    - node.type.apidae_object
+id: node.apidae_object.ao_privdesc2
+field_name: ao_privdesc2
+entity_type: node
+bundle: apidae_object
+label: Descriptif privé 2
+description: "Descriptif privé 2"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: text

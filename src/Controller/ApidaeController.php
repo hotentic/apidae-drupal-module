@@ -39,8 +39,8 @@ class ApidaeController extends ControllerBase {
 
         try {
           while(($cycles == 0 || $objectsCount < $results['numFound']) && $cycles < self::MAX_CYCLES) {
-            $results = $this->loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $objectsCount);
             $cycles += 1;
+            $results = $this->loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $objectsCount);
             if (isset($results['objetsTouristiques'])) {
               $objectsCount += count($results['objetsTouristiques']);
               $all_objects = array_merge($all_objects, array_values($results['objetsTouristiques']));
@@ -194,7 +194,7 @@ class ApidaeController extends ControllerBase {
           $node->set('ao_longitude', $content['localisation']['geolocalisation']['geoJson']['coordinates']['0']);
         }
 
-        // contact info
+        // moyens de communication
         if (isset($content['informations']['moyensCommunication'])) {
           foreach ($content['informations']['moyensCommunication'] as $key => $value) {
             switch ($value['type']['id']) {
@@ -212,6 +212,30 @@ class ApidaeController extends ControllerBase {
                 break;
               default :
                 break;
+            }
+          }
+        }
+
+        // contacts
+        if (isset($content['contacts'])) {
+          foreach ($content['contacts'] as $key => $value) {
+            if($key < 3) {
+              $contact = $value['prenom']." ".$value['nom']." - ".$value['titre']['libelleFr'];
+              if (isset($value['moyensCommunication'])) {
+                foreach ($value['moyensCommunication'] as $kee => $val) {
+                  switch ($val['type']['id']) {
+                    case '201' :
+                      $contact .= "\nTéléphone : " . $val['coordonnees']['fr'];
+                      break;
+                    case '204' :
+                      $contact .= "\nEmail : " . $val['coordonnees']['fr'];
+                      break;
+                    default :
+                      break;
+                  }
+                }
+              }
+              $node->set('ao_contact'.($key + 1), $contact);
             }
           }
         }
@@ -263,11 +287,12 @@ class ApidaeController extends ControllerBase {
           $node->set('ao_rates', $content['descriptionTarif']['tarifsEnClair']['libelleFr']);
         }
 
-        // Descriptifs prives
+        // descriptifs prives
         if (isset($content['donneesPrivees'])) {
           foreach ($content['donneesPrivees'] as $key => $value) {
-            \Drupal::logger('Apidae')->info("donneesPrivees key : ".$key);
-            $node->set('ao_privdesc1', $value['descriptif']);
+            if($key < 3) {
+              $node->set('ao_privdesc'.($key + 1), $value['descriptif']);
+            }
           }
         }
 
