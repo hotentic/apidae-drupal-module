@@ -83,7 +83,7 @@ class ApidaeController extends ControllerBase {
           "ouverture.periodesOuvertures", "descriptionTarif.tarifsEnClair.LibelleFr", "contacts"]
       ]
     ]);
-    \Drupal::logger('Apidae query')->info("Retrieved objects ".$offset." to ".($offset + count($results['objetsTouristiques']))." in total of ".$results['numFound']);
+    \Drupal::logger('Apidae query')->info("Retrieved ".count($results['objetsTouristiques'])." objects starting from ".$offset." for a total of ".$results['numFound']);
 
     return $results;
   }
