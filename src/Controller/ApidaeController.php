@@ -39,11 +39,10 @@ class ApidaeController extends ControllerBase {
         try {
           \Drupal::logger('Apidae query')->info("Selection ".$selection." - cycle ".$cycles." - ".count($all_objects)." objects");
           $results = $this->loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $objectsCount);
-          \Drupal::logger('Apidae query')->info("Testing objects dump : ".print_r(array_keys($results['objetsTouristiques']), true));
           if (isset($results['objetsTouristiques'])) {
             $objectsCount += count($results['objetsTouristiques']);
             $cycles += 1;
-            $all_objects += $results['objetsTouristiques'];
+            $all_objects = array_merge($all_objects, array_values($results['objetsTouristiques']));
           }
 
           while($objectsCount < $results['numFound'] && $cycles < self::MAX_CYCLES) {
@@ -52,7 +51,7 @@ class ApidaeController extends ControllerBase {
             if (isset($results['objetsTouristiques'])) {
               $objectsCount += count($results['objetsTouristiques']);
               $cycles += 1;
-              $all_objects += $results['objetsTouristiques'];
+              $all_objects = array_merge($all_objects, array_values($results['objetsTouristiques']));
             }
           }
           \Drupal::logger('Apidae query')->info("Selection ".$selection." - Retrieved ".count($all_objects)." objects");
