@@ -25,6 +25,7 @@ class ApidaeSettingsForm extends ConfigFormBase {
     );
     $form['apidae_api']['url'] = array(
       '#type' => 'textfield',
+      '#maxlength' => 120,
       '#title' => t('Adresse web (URL)'),
       '#required' => TRUE,
       '#default_value' => $apidaeConfig->get('api.url')
@@ -75,6 +76,7 @@ class ApidaeSettingsForm extends ConfigFormBase {
     );
     $form['apidae_data']['selections'] = array(
       '#type' => 'textfield',
+      '#maxlength' => 120,
       '#title' => t('Sélections Apidae pré-calculées'),
       '#description' => t('Si vous avez plusieurs sélections, séparez-les par une virgule'),
       '#required' => FALSE,
