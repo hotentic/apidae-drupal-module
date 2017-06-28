@@ -63,6 +63,10 @@ class ApidaeController extends ControllerBase {
     return new Response('', 204);
   }
 
+//http://api.apidae-tourisme.com/api/v002/recherche/list-objets-touristiques?query={"apiKey":"nNiMK72L","projetId":"2449","selectionIds":[50351],"count":100,"first":100,"order":"NOM","responseFields":["id", "nom", "@informationsObjetTouristique","donneesPrivees"]}
+
+//"http://api.apidae-tourisme.com/api/v002/recherche/list-objets-touristiques?query={\"apiKey\":\"nNiMK72L\",\"projetId\":\"2449\",\"selectionIds\":[50351],\"responseFields\":[\"id\",\"nom\",\"donneesPrivees\"]}"
+
   private function loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $offset) {
     $results =  $client->searchObject([
       'query' => [
@@ -291,7 +295,8 @@ class ApidaeController extends ControllerBase {
         if (isset($content['donneesPrivees'])) {
           foreach ($content['donneesPrivees'] as $key => $value) {
             if($key < 3) {
-              $node->set('ao_privdesc'.($key + 1), $value['descriptif']);
+              \Drupal::logger('Apidae query')->info("Setting ao_privdesc".($key + 1)." to ".$value['descriptif']['libelleFr']);
+              $node->set('ao_privdesc'.($key + 1), $value['descriptif']['libelleFr']);
             }
           }
         }
