@@ -76,7 +76,7 @@ class ApidaeSettingsForm extends ConfigFormBase {
     );
     $form['apidae_data']['selections'] = array(
       '#type' => 'textfield',
-      '#maxlength' => 200,
+      '#maxlength' => 500,
       '#title' => t('Sélections Apidae pré-calculées'),
       '#description' => t('Si vous avez plusieurs sélections, séparez-les par une virgule'),
       '#required' => FALSE,
