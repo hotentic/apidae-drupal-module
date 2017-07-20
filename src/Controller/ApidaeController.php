@@ -78,7 +78,7 @@ class ApidaeController extends ControllerBase {
         "responseFields" => ["id", "nom", "illustrations", "multimedias", "informations", "presentation",
           "localisation", "@informationsObjetTouristique", "ouverture.periodeEnClair",
           "ouverture.periodesOuvertures", "descriptionTarif.tarifsEnClair.libelleFr", "contacts",
-          "donneesPrivees"]
+          "donneesPrivees", "criteresInternes"]
       ]
     ]);
     \Drupal::logger('Apidae query')->info("Retrieved ".count($results['objetsTouristiques'])." objects starting from ".$offset." for a total of ".$results['numFound']);
@@ -297,6 +297,43 @@ class ApidaeController extends ControllerBase {
             if($key < 3) {
               \Drupal::logger('Apidae query')->info("Setting ao_privdesc".($key + 1)." to ".$value['descriptif']['libelleFr']);
               $node->set('ao_privdesc'.($key + 1), $value['descriptif']['libelleFr']);
+            }
+          }
+        }
+
+        // criteres internes (highly specific - ref values should be moved to config)
+        if (isset($content['criteresInternes'])) {
+          $refValues1 = [10205, 10261, 10264, 10263, 10265, 10258, 10269, 10267,
+            10268, 10256, 10260, 10270, 10262, 10259, 10266, 10257, 10233, 10271];
+          $refValues2 = [10376, 10378, 10375, 10377];
+          $refValues3 = [4359, 4360];
+          foreach ($content['criteresInternes'] as $key => $value) {
+            if(in_array($value['id'], $refValues1)) {
+              \Drupal::logger('Apidae query')->info("Adding criteria ".$value['libelle']." to field internal1");
+              $internal = $node->ao_internal1->value;
+              $internal = isset($internal) ? explode(', ', $internal) : array();
+              if(!in_array($value['libelle'], $internal)) {
+                array_push($internal, $value['libelle']);
+                $node->set('ao_internal1', join(', ', $internal));
+              }
+            }
+            if(in_array($value['id'], $refValues2)) {
+              \Drupal::logger('Apidae query')->info("Adding criteria ".$value['libelle']." to field internal2");
+              $internal = $node->ao_internal2->value;
+              $internal = isset($internal) ? explode(', ', $internal) : array();
+              if(!in_array($value['libelle'], $internal)) {
+                array_push($internal, $value['libelle']);
+                $node->set('ao_internal2', join(', ', $internal));
+              }
+            }
+            if(in_array($value['id'], $refValues3)) {
+              \Drupal::logger('Apidae query')->info("Adding criteria ".$value['libelle']." to field internal3");
+              $internal = $node->ao_internal3->value;
+              $internal = isset($internal) ? explode(', ', $internal) : array();
+              if(!in_array($value['libelle'], $internal)) {
+                array_push($internal, $value['libelle']);
+                $node->set('ao_internal3', join(', ', $internal));
+              }
             }
           }
         }
