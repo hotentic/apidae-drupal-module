@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_type_criteria
+    - node.type.apidae_object
+id: node.apidae_object.ao_type_criteria
+field_name: ao_type_criteria
+entity_type: node
+bundle: apidae_object
+label: Critères relatifs au type
+description: "Critères relatifs au type"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: text

@@ -295,13 +295,12 @@ class ApidaeController extends ControllerBase {
         if (isset($content['donneesPrivees'])) {
           foreach ($content['donneesPrivees'] as $key => $value) {
             if($key < 3) {
-              \Drupal::logger('Apidae query')->info("Setting ao_privdesc".($key + 1)." to ".$value['descriptif']['libelleFr']);
               $node->set('ao_privdesc'.($key + 1), $value['descriptif']['libelleFr']);
             }
           }
         }
 
-        // criteres internes (highly specific - ref values should be moved to config)
+        // criteres internes (highly specific - ref values should be moved to config and code duplication removed)
         if (isset($content['criteresInternes'])) {
           $refValues1 = [10205, 10261, 10264, 10263, 10265, 10258, 10269, 10267,
             10268, 10256, 10260, 10270, 10262, 10259, 10266, 10257, 10233, 10271];
@@ -309,7 +308,6 @@ class ApidaeController extends ControllerBase {
           $refValues3 = [4359, 4360];
           foreach ($content['criteresInternes'] as $key => $value) {
             if(in_array($value['id'], $refValues1)) {
-              \Drupal::logger('Apidae query')->info("Adding criteria ".$value['libelle']." to field internal1");
               $internal = $node->ao_internal1->value;
               $internal = isset($internal) ? explode(', ', $internal) : array();
               if(!in_array($value['libelle'], $internal)) {
@@ -318,7 +316,6 @@ class ApidaeController extends ControllerBase {
               }
             }
             if(in_array($value['id'], $refValues2)) {
-              \Drupal::logger('Apidae query')->info("Adding criteria ".$value['libelle']." to field internal2");
               $internal = $node->ao_internal2->value;
               $internal = isset($internal) ? explode(', ', $internal) : array();
               if(!in_array($value['libelle'], $internal)) {
@@ -327,12 +324,41 @@ class ApidaeController extends ControllerBase {
               }
             }
             if(in_array($value['id'], $refValues3)) {
-              \Drupal::logger('Apidae query')->info("Adding criteria ".$value['libelle']." to field internal3");
               $internal = $node->ao_internal3->value;
               $internal = isset($internal) ? explode(', ', $internal) : array();
               if(!in_array($value['libelle'], $internal)) {
                 array_push($internal, $value['libelle']);
                 $node->set('ao_internal3', join(', ', $internal));
+              }
+            }
+          }
+        }
+
+        // type-specific criteria (highly specific also)
+        if(isset($content['informationsEquipement']) && isset($content['informationsEquipement']['activites'])) {
+          $refValues = [4359, 4360];
+          foreach ($content['informationsEquipement']['activites'] as $key => $value) {
+            if(in_array($value['id'], $refValues)) {
+              $typeCriteria = $node->ao_type_criteria->value;
+              $typeCriteria = isset($typeCriteria) ? explode(', ', $typeCriteria) : array();
+              if(!in_array($value['libelleFr'], $typeCriteria)) {
+                array_push($typeCriteria, $value['libelleFr']);
+                $node->set('ao_type_criteria', join(', ', $typeCriteria));
+              }
+            }
+          }
+        }
+
+        // links - actual links markup generated here
+        if(isset($content['liens']) && isset($content['liens']['liensObjetsTouristiquesTypes'])) {
+          foreach ($content['liens']['liensObjetsTouristiquesTypes'] as $key => $value) {
+            if($key < 5 && $value['objetTouristique']) {
+              $linkId = $this->checkNodeExists($value['objetTouristique']['id']);
+              if(!is_null($linkId)) {
+                $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$linkId);
+                $linkElt = '<a href="'.$linkAlias.'">'.$value['objetTouristique']['nom']['libelleFr'].'</a>';
+                \Drupal::logger('Apidae query')->info('setting link ao_link'.($key + 1).' to '.$linkElt);
+                $node->set('ao_link'.($key + 1), $linkElt);
               }
             }
           }
