@@ -77,7 +77,7 @@ class ApidaeController extends ControllerBase {
         "criteresQuery" => $typesCriteria,
         "responseFields" => ["id", "nom", "illustrations", "multimedias", "informations", "presentation",
           "localisation", "@informationsObjetTouristique", "ouverture.periodeEnClair",
-          "ouverture.periodesOuvertures", "descriptionTarif.tarifsEnClair.libelleFr", "contacts",
+          "ouverture.periodesOuvertures", "descriptionTarif.tarifsEnClair.libelleFr", "contacts", "liens",
           "donneesPrivees", "criteresInternes"]
       ]
     ]);
