@@ -291,11 +291,16 @@ class ApidaeController extends ControllerBase {
           $node->set('ao_rates', $content['descriptionTarif']['tarifsEnClair']['libelleFr']);
         }
 
-        // descriptifs prives
+        // descriptifs prives (ref values should be moved to configuration)
         if (isset($content['donneesPrivees'])) {
           foreach ($content['donneesPrivees'] as $key => $value) {
-            if($key < 3) {
-              $node->set('ao_privdesc'.($key + 1), $value['descriptif']['libelleFr']);
+            if ($key < 3) {
+              $privateField = $value['nomTechnique'];
+              if ($privateField == '1486_References') {
+                $node->set('ao_privdesc1', $value['descriptif']['libelleFr']);
+              } elseif ($privateField == '1486_InformationsComplementaires') {
+                $node->set('ao_privdesc2', $value['descriptif']['libelleFr']);
+              }
             }
           }
         }
