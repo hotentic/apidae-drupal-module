@@ -375,6 +375,7 @@ class ApidaeController extends ControllerBase {
           if(!is_null($entityId)) {
             $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$entityId);
             $linkElt = $managingEntity['nom']['libelleFr'].'|'.$linkAlias;
+            \Drupal::logger('Apidae query')->info('setting ao_entity to '.$linkElt);
             $node->set('ao_entity', $linkElt);
           }
         }
