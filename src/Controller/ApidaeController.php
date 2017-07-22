@@ -354,14 +354,14 @@ class ApidaeController extends ControllerBase {
           }
         }
 
-        // links - actual links markup generated here
+        // links (format is : label|url)
         if(isset($content['liens']) && isset($content['liens']['liensObjetsTouristiquesTypes'])) {
           foreach ($content['liens']['liensObjetsTouristiquesTypes'] as $key => $value) {
             if($key < 5 && $value['objetTouristique']) {
               $linkId = $this->checkNodeExists($value['objetTouristique']['id']);
               if(!is_null($linkId)) {
                 $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$linkId);
-                $linkElt = '<a href="'.$linkAlias.'">'.$value['objetTouristique']['nom']['libelleFr'].'</a>';
+                $linkElt = $value['objetTouristique']['nom']['libelleFr'].'|'.$linkAlias;
                 \Drupal::logger('Apidae query')->info('setting link ao_link'.($key + 1).' to '.$linkElt);
                 $node->set('ao_link'.($key + 1), $linkElt);
               }
