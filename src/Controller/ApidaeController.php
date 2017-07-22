@@ -362,10 +362,20 @@ class ApidaeController extends ControllerBase {
               if(!is_null($linkId)) {
                 $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$linkId);
                 $linkElt = $value['objetTouristique']['nom']['libelleFr'].'|'.$linkAlias;
-                \Drupal::logger('Apidae query')->info('setting link ao_link'.($key + 1).' to '.$linkElt);
                 $node->set('ao_link'.($key + 1), $linkElt);
               }
             }
+          }
+        }
+
+        // managing entity
+        if(isset($content['informations']) && isset($content['informations']['structureGestion'])) {
+          $managingEntity = $content['informations']['structureGestion'];
+          $entityId = $this->checkNodeExists($managingEntity['id']);
+          if(!is_null($entityId)) {
+            $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$entityId);
+            $linkElt = $managingEntity['nom']['libelleFr'].'|'.$linkAlias;
+            $node->set('ao_entity', $linkElt);
           }
         }
 

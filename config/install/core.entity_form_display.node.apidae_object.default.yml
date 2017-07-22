@@ -44,6 +44,7 @@ dependencies:
     - field.field.node.apidae_object.ao_link3
     - field.field.node.apidae_object.ao_link4
     - field.field.node.apidae_object.ao_link5
+    - field.field.node.apidae_object.ao_entity
     - node.type.apidae_object
 id: node.apidae_object.default
 targetEntityType: node
