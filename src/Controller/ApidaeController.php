@@ -368,15 +368,13 @@ class ApidaeController extends ControllerBase {
           }
         }
 
-        // managing entity (format is : label|url)
+        // managing entity (format is : label|url - tries to match an apidae object of type structure)
         if(isset($content['informations']) && isset($content['informations']['structureGestion'])) {
-//          $managingEntity = $content['informations']['structureGestion'];
-          \Drupal::logger('Apidae query')->info('entity id is '.$content['informations']['structureGestion']['id']);
-          $entityId = $this->checkNodeExists($content['informations']['structureGestion']['id']);
-          \Drupal::logger('Apidae query')->info('matched node id is '.$entityId);
+          $managingEntity = $content['informations']['structureGestion'];
+          $entityId = $this->checkNodeExists($managingEntity['id']);
           if(!is_null($entityId)) {
             $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$entityId);
-            $linkElt = $content['informations']['structureGestion']['nom']['libelleFr'].'|'.$linkAlias;
+            $linkElt = $managingEntity['nom']['libelleFr'].'|'.$linkAlias;
             \Drupal::logger('Apidae query')->info('setting ao_entity to '.$linkElt);
             $node->set('ao_entity', $linkElt);
           }
