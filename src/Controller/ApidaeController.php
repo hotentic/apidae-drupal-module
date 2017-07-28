@@ -363,22 +363,26 @@ class ApidaeController extends ControllerBase {
                 $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$linkId);
                 $linkElt = $value['objetTouristique']['nom']['libelleFr'].'|'.$linkAlias;
                 $node->set('ao_link'.($key + 1), $linkElt);
+                if(strpos(strtolower($value['objetTouristique']['nom']['libelleFr']), 'aappma') !== false) {
+                  $node->set('ao_entity', $linkElt);
+                }
               }
             }
           }
         }
 
+        // Note : Unused for now - structures are not imported in project
         // managing entity (format is : label|url - tries to match an apidae object of type structure)
-        if(isset($content['informations']) && isset($content['informations']['structureGestion'])) {
-          $managingEntity = $content['informations']['structureGestion'];
-          $entityId = $this->checkNodeExists($managingEntity['id']);
-          if(!is_null($entityId)) {
-            $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$entityId);
-            $linkElt = $managingEntity['nom']['libelleFr'].'|'.$linkAlias;
-            \Drupal::logger('Apidae query')->info('setting ao_entity to '.$linkElt);
-            $node->set('ao_entity', $linkElt);
-          }
-        }
+//        if(isset($content['informations']) && isset($content['informations']['structureGestion'])) {
+//          $managingEntity = $content['informations']['structureGestion'];
+//          $entityId = $this->checkNodeExists($managingEntity['id']);
+//          if(!is_null($entityId)) {
+//            $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$entityId);
+//            $linkElt = $managingEntity['nom']['libelleFr'].'|'.$linkAlias;
+//            \Drupal::logger('Apidae query')->info('setting ao_entity to '.$linkElt);
+//            $node->set('ao_entity', $linkElt);
+//          }
+//        }
 
         $node->save();
       } else {
