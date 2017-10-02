@@ -10,7 +10,7 @@ apidae.import_tab:
   path: '/admin/config/system/apidae/import'
   defaults:
     _form: '\Drupal\apidae_drupal_module\Form\ApidaeImportForm'
-    _title: 'Import'
+    _title: 'Import des données Apidae'
   requirements:
     _permission: 'administer apidae'
 
