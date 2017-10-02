@@ -3,12 +3,7 @@ apidae.config:
   base_route: apidae.config
   title: 'Paramètres'
 
-apidae.data:
-  route_name: apidae.import
+apidae.import_data:
+  route_name: apidae.import_tab
   title: 'Importer'
   base_route: apidae.config
-
-apidae.import:
-  route_name: apidae.import
-  title: 'Lancer un import'
-  parent_id: apidae.data

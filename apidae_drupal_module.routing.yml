@@ -5,6 +5,15 @@ apidae.config:
     _title: 'Paramétrages Apidae'
   requirements:
     _permission: 'administer apidae'
+
+apidae.import_tab:
+  path: '/admin/config/system/apidae/import'
+  defaults:
+    _form: '\Drupal\apidae_drupal_module\Form\ApidaeImportForm'
+    _title: 'Import'
+  requirements:
+    _permission: 'administer apidae'
+
 apidae.import:
   path: '/admin/apidae/import'
   defaults:
@@ -12,3 +21,4 @@ apidae.import:
     _title: 'Objets touristiques Apidae'
   requirements:
     _permission: 'administer apidae'
+
