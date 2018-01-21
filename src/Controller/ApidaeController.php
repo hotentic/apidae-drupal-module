@@ -144,19 +144,19 @@ class ApidaeController extends ControllerBase {
       }
       if(!is_null($node)) {
         if (isset($content['presentation']['descriptifDetaille']['libelleFr'])) {
-          $complaint_body = $content['presentation']['descriptifDetaille']['libelleFr'];
+          $desc_body = $content['presentation']['descriptifDetaille']['libelleFr'];
         } elseif (isset($content['presentation']['descriptifCourt']['libelleFr'])) {
-          $complaint_body = $content['presentation']['descriptifCourt']['libelleFr'];
+          $desc_body = $content['presentation']['descriptifCourt']['libelleFr'];
         } else {
-          $complaint_body = '';
+          $desc_body = '';
         }
 
         $node->set('ao_id', $contentId);
         $node->setTitle($content['nom']['libelleFr']);
         $node->set('body', array(
-          'value' => nl2br($complaint_body),
+          'value' => $desc_body,
           'format' => 'full_html',
-          'summary' => isset($content['presentation']['descriptifCourt']['libelleFr']) ? $content['presentation']['descriptifCourt']['libelleFr'] : text_summary(nl2br($complaint_body))
+          'summary' => isset($content['presentation']['descriptifCourt']['libelleFr']) ? $content['presentation']['descriptifCourt']['libelleFr'] : text_summary($desc_body)
         ));
         $node->set('ao_type', $content['type']);
 
@@ -245,7 +245,7 @@ class ApidaeController extends ControllerBase {
         }
 
         if (isset($content['presentation']['descriptifCourt']['libelleFr'])) {
-          $node->set('ao_short_desc', nl2br($content['presentation']['descriptifCourt']['libelleFr']));
+          $node->set('ao_short_desc', $content['presentation']['descriptifCourt']['libelleFr']);
         }
 
         // first picture fields
@@ -341,7 +341,7 @@ class ApidaeController extends ControllerBase {
 
         // type-specific criteria (highly specific also)
         if(isset($content['informationsEquipement']) && isset($content['informationsEquipement']['activites'])) {
-          $refValues = [4359, 4360];
+          $refValues = [4359, 4360, 4361, 4362, 4363, 4364, 4365];
           foreach ($content['informationsEquipement']['activites'] as $key => $value) {
             if(in_array($value['id'], $refValues)) {
               $typeCriteria = $node->ao_type_criteria->value;
