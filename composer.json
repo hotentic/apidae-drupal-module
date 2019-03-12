@@ -1,5 +1,5 @@
 {
-  "name": "apidae-tourisme/apiade_drupal_module",
+  "name": "apidae-tourisme/apidae_drupal_module",
   "description": "A Drupal module to import Apidae data into Drupal sites (version 8.x and above)",
   "type": "drupal-module",
   "license": "MIT",
