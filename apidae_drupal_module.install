@@ -115,4 +115,5 @@ function apidae_drupal_module_update_8106() {
     if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
       FieldConfig::create($yml)->save();
     }
+  }
 }
