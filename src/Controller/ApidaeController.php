@@ -315,6 +315,14 @@ class ApidaeController extends ControllerBase
                     $node->set('ao_types_manifestation', $content['informationsFeteEtManifestation']['typesManifestation']['dateDebut']);
                 }
 
+                if (isset($content['tourismesAdaptes']['libelleFr'])) {
+                    $node->set('ao_tourismes_adaptes', $content['tourismesAdaptes']['libelleFr']);
+                }
+
+                if (isset($content['descriptifHandicapMoteur']['libelleFr'])) {
+                    $node->set('ao_desc_motor_handicap', $content['descriptifHandicapMoteur']['libelleFr']);
+                }
+
                 // descriptifs prives (ref values should be moved to configuration)
                 if (isset($content['donneesPrivees'])) {
                     foreach ($content['donneesPrivees'] as $key => $value) {

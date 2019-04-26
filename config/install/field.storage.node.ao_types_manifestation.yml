@@ -1,18 +1,19 @@
 langcode: fr
 status: true
 dependencies:
-  module:
-    - apidae_drupal_module
+  config:
+    - field.storage.node.ao_types_manifestation
+    - node.type.apidae_object
 id: node.apidae_object.ao_types_manifestation
 field_name: ao_types_manifestation
 entity_type: node
-type: string_long
-settings:
-  case_sensitive: false
-module: apidae_drupal_module
-locked: false
-cardinality: 1
+bundle: apidae_object
+label: Type de manifestation
+description: "Type de manifestation"
+required: false
 translatable: false
-indexes: {  }
-persist_with_no_fields: false
-custom_storage: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: float

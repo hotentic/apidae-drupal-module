@@ -2,14 +2,14 @@ langcode: fr
 status: true
 dependencies:
   config:
-    - field.storage.node.ao_complement_accueil
+    - field.storage.node.ao_desc_motor_handicap
     - node.type.apidae_object
-id: node.apidae_object.ao_complement_accueil
-field_name: ao_complement_accueil
+id: node.apidae_object.ao_desc_motor_handicap
+field_name: ao_desc_motor_handicap
 entity_type: node
 bundle: apidae_object
-label: Complement d'accueil
-description: "Complement d'accueil"
+label: Descripif handicap moteur
+description: "Tourismes adaptés"
 required: false
 translatable: false
 default_value: {  }
