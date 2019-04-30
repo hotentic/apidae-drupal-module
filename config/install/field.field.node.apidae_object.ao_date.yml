@@ -2,18 +2,18 @@ langcode: fr
 status: true
 dependencies:
   config:
-    - field.storage.node.ao_desc_motor_handicap
+    - field.storage.node.ao_date
     - node.type.apidae_object
-id: node.apidae_object.ao_desc_motor_handicap
-field_name: ao_desc_motor_handicap
+id: node.apidae_object.ao_date
+field_name: ao_date
 entity_type: node
 bundle: apidae_object
-label: Descriptif handicap moteur
-description: "Descriptif handicap moteur"
+label: Date
+description: "Date"
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
   display_summary: false
-field_type: text
+field_type: string

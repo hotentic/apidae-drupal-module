@@ -3,10 +3,10 @@ status: true
 dependencies:
   module:
     - apidae_drupal_module
-id: node.apidae_object.ao_animals
-field_name: ao_animals
+id: node.apidae_object.ao_manifestation_type
+field_name: ao_manifestation_type
 entity_type: node
-type: string_long
+type: string
 settings:
   case_sensitive: false
 module: apidae_drupal_module

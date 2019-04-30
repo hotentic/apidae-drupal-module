@@ -83,7 +83,7 @@ class ApidaeController extends ControllerBase
                 "responseFields" => ["id", "nom", "illustrations", "multimedias", "informations", "presentation",
                     "localisation", "@informationsObjetTouristique", "ouverture.periodeEnClair",
                     "ouverture.periodesOuvertures", "descriptionTarif.tarifsEnClair.libelleFr", "contacts", "liens",
-                    "donneesPrivees", "criteresInternes"]
+                    "donneesPrivees", "criteresInternes", 'prestations']
             ]
         ]);
         \Drupal::logger('Apidae query')->info("Retrieved " . count($results['objetsTouristiques']) . " objects starting from " . $offset . " for a total of " . $results['numFound']);
@@ -299,24 +299,24 @@ class ApidaeController extends ControllerBase
                     $node->set('ao_rates', $content['descriptionTarif']['tarifsEnClair']['libelleFr']);
                 }
 
-                if (isset($content['animauxAcceptes'])) {
-                    $node->set('ao_animals', $content['animauxAcceptes']);
+                if (isset($content['prestations']['animauxAcceptes'])) {
+                    $node->set('ao_animals', $content['prestations']['animauxAcceptes']);
                 }
 
-                if (isset($content['complementAccueil']['libelleFr'])) {
-                    $node->set('ao_complement_accueil', $content['complementAccueil']['libelleFr']);
+                if (isset($content['prestations']['complementAccueil']['libelleFr'])) {
+                    $node->set('ao_host_complement', $content['prestations']['complementAccueil']['libelleFr']);
                 }
 
-                if (isset($content['ouverture']['periodesOuvertures']['dateDebut'])) {
-                    $node->set('ao_date', $content['ouverture']['periodesOuvertures']['dateDebut']);
+                if (isset($content['ouverture']['periodesOuvertures'][0]['dateDebut'])) {
+                    $node->set('ao_date', $content['ouverture']['periodesOuvertures'][0]['dateDebut']);
                 }
 
-                if (isset($content['informationsFeteEtManifestation']['typesManifestation']['dateDebut'])) {
-                    $node->set('ao_types_manifestation', $content['informationsFeteEtManifestation']['typesManifestation']['dateDebut']);
+                if (isset($content['informationsFeteEtManifestation']['typesManifestation'][0]['libelleFr'])) {
+                    $node->set('ao_manifestation_type', $content['informationsFeteEtManifestation']['typesManifestation'][0]['libelleFr']);
                 }
 
                 if (isset($content['tourismesAdaptes']['libelleFr'])) {
-                    $node->set('ao_tourismes_adaptes', $content['tourismesAdaptes']['libelleFr']);
+                    $node->set('ao_adapted_tourism', $content['tourismesAdaptes']['libelleFr']);
                 }
 
                 if (isset($content['descriptifHandicapMoteur']['libelleFr'])) {
@@ -405,16 +405,16 @@ class ApidaeController extends ControllerBase
 
                 // Note : Unused for now - structures are not imported in project
                 // managing entity (format is : label|url - tries to match an apidae object of type structure)
-//        if(isset($content['informations']) && isset($content['informations']['structureGestion'])) {
-//          $managingEntity = $content['informations']['structureGestion'];
-//          $entityId = $this->checkNodeExists($managingEntity['id']);
-//          if(!is_null($entityId)) {
-//            $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$entityId);
-//            $linkElt = $managingEntity['nom']['libelleFr'].'|'.$linkAlias;
-//            \Drupal::logger('Apidae query')->info('setting ao_entity to '.$linkElt);
-//            $node->set('ao_entity', $linkElt);
-//          }
-//        }
+                if (isset($content['informations']) && isset($content['informations']['structureGestion'])) {
+                    $managingEntity = $content['informations']['structureGestion'];
+                    $entityId = $this->checkNodeExists($managingEntity['id']);
+                    if (!is_null($entityId)) {
+                        $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/' . $entityId);
+                        $linkElt = $managingEntity['nom']['libelleFr'] . '|' . $linkAlias;
+                        \Drupal::logger('Apidae query')->info('setting ao_entity to ' . $linkElt);
+                        $node->set('ao_entity', $linkElt);
+                    }
+                }
 
                 $node->save();
             } else {

@@ -2,10 +2,10 @@ langcode: fr
 status: true
 dependencies:
   config:
-    - field.storage.node.ao_types_manifestation
+    - field.storage.node.ao_manifestation_type
     - node.type.apidae_object
-id: node.apidae_object.ao_types_manifestation
-field_name: ao_types_manifestation
+id: node.apidae_object.ao_manifestation_type
+field_name: ao_manifestation_type
 entity_type: node
 bundle: apidae_object
 label: Type de manifestation
@@ -16,4 +16,4 @@ default_value: {  }
 default_value_callback: ''
 settings:
   display_summary: false
-field_type: float
+field_type: string

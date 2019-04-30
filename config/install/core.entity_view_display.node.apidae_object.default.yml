@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.apidae_object.ao_id
     - field.field.node.apidae_object.body
     - field.field.node.apidae_object.ao_type
+    - field.field.node.apidae_object.ao_manifestation_type
     - field.field.node.apidae_object.ao_selections
     - field.field.node.apidae_object.ao_address1
     - field.field.node.apidae_object.ao_address2
@@ -28,6 +29,11 @@ dependencies:
     - field.field.node.apidae_object.ao_pdf_url
     - field.field.node.apidae_object.ao_pdf_title
     - field.field.node.apidae_object.ao_openings
+    - field.field.node.apidae_object.ao_date
+    - field.field.node.apidae_object.ao_animals
+    - field.field.node.apidae_object.ao_adapted_tourism
+    - field.field.node.apidae_object.ao_adapted_desc_motor_handicap
+    - field.field.node.apidae_object.ao_adapted_host_complement
     - field.field.node.apidae_object.ao_rates
     - field.field.node.apidae_object.ao_privdesc1
     - field.field.node.apidae_object.ao_privdesc2
@@ -209,4 +215,40 @@ content:
     third_party_settings: {  }
   links:
     weight: 100
+  ao_animals:
+    label: hidden
+    type: string
+    weight: 125
+    settings: {  }
+    third_party_settings: {  }
+  ao_manifestation_type:
+    label: hidden
+    type: string
+    weight: 126
+    settings: {  }
+    third_party_settings: {  }
+  ao_host_complement:
+    label: hidden
+    type: string
+    weight: 127
+    settings: {  }
+    third_party_settings: {  }
+  ao_adapted_tourism:
+    label: hidden
+    type: string
+    weight: 128
+    settings: {  }
+    third_party_settings: {  }
+  ao_desc_motor_handicap:
+    label: hidden
+    type: string
+    weight: 129
+    settings: {  }
+    third_party_settings: {  }
+  ao_date:
+    label: hidden
+    type: string
+    weight: 130
+    settings: {  }
+    third_party_settings: {  }
 hidden: {  }

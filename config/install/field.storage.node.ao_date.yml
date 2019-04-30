@@ -1,19 +1,18 @@
 langcode: fr
 status: true
 dependencies:
-  config:
-    - field.storage.node.ao_date
-    - node.type.apidae_object
+  module:
+    - apidae_drupal_module
 id: node.apidae_object.ao_date
 field_name: ao_date
 entity_type: node
-bundle: apidae_object
-label: Date
-description: "Date"
-required: false
-translatable: false
-default_value: {  }
-default_value_callback: ''
+type: string
 settings:
-  display_summary: false
-field_type: float
+  case_sensitive: false
+module: apidae_drupal_module
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

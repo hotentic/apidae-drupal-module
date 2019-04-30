@@ -3,8 +3,8 @@ status: true
 dependencies:
   module:
     - apidae_drupal_module
-id: node.apidae_object.ao_animals
-field_name: ao_animals
+id: node.apidae_object.ao_desc_motor_handicap
+field_name: ao_desc_motor_handicap
 entity_type: node
 type: string_long
 settings:

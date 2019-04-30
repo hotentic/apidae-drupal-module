@@ -2,18 +2,18 @@ langcode: fr
 status: true
 dependencies:
   config:
-    - field.storage.node.ao_complement_accueil
+    - field.storage.node.ao_adapted_tourism
     - node.type.apidae_object
-id: node.apidae_object.ao_complement_accueil
-field_name: ao_complement_accueil
+id: node.apidae_object.ao_adapted_tourism
+field_name: ao_adapted_tourism
 entity_type: node
 bundle: apidae_object
-label: Complement d'accueil
-description: "Complement d'accueil"
+label: Tourismes adaptés
+description: "Tourismes adaptés"
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
   display_summary: false
-field_type: float
+field_type: text
