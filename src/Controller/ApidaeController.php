@@ -303,6 +303,10 @@ class ApidaeController extends ControllerBase
                     $node->set('ao_animals', $content['prestations']['animauxAcceptes']);
                 }
 
+                if (isset($content['prestations']['animauxAcceptesSupplement'])) {
+                    $node->set('ao_animals_complement', $content['prestations']['animauxAcceptesSupplement']);
+                }
+
                 if (isset($content['prestations']['complementAccueil']['libelleFr'])) {
                     $node->set('ao_host_complement', $content['prestations']['complementAccueil']['libelleFr']);
                 }
@@ -321,6 +325,10 @@ class ApidaeController extends ControllerBase
 
                 if (isset($content['descriptifHandicapMoteur']['libelleFr'])) {
                     $node->set('ao_desc_motor_handicap', $content['descriptifHandicapMoteur']['libelleFr']);
+                }
+
+                if (isset($content['informations']['structureInformation']['nom']['libelleFr'])) {
+                    $node->set('ao_structure_information', $content['informations']['structureInformation']['nom']['libelleFr']);
                 }
 
                 // descriptifs prives (ref values should be moved to configuration)
