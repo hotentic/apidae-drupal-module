@@ -30,6 +30,7 @@ dependencies:
     - field.field.node.apidae_object.ao_pdf_title
     - field.field.node.apidae_object.ao_openings
     - field.field.node.apidae_object.ao_date
+    - field.field.node.apidae_object.ao_dates
     - field.field.node.apidae_object.ao_animals
     - field.field.node.apidae_object.ao_adapted_tourism
     - field.field.node.apidae_object.ao_adapted_desc_motor_handicap
@@ -271,4 +272,10 @@ content:
     weight: 132
     settings: {  }
     third_party_settings: {  }
+  ao_dates:
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
 hidden: {  }

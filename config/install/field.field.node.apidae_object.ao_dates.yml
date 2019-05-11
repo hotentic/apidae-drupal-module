@@ -1,0 +1,20 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_dates
+    - node.type.apidae_object
+  module:
+    - datetime
+id: node.apidae_object.ao_dates
+field_name: ao_dates
+entity_type: node
+bundle: apidae_object
+label: Dates
+description: "Dates d'ouverture"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime
