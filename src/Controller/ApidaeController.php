@@ -313,8 +313,14 @@ class ApidaeController extends ControllerBase
 
                 if (isset($content['ouverture']['periodesOuvertures'][0]['dateDebut'])) {
                     $node->set('ao_date', $content['ouverture']['periodesOuvertures'][0]['dateDebut']);
-                    $node->ao_dates[] = $content['ouverture']['periodesOuvertures'][0]['dateDebut'];
+
+                    foreach ($content['ouverture']['periodesOuvertures'] as $key => $value) {
+                        $node->ao_dates[] = $content['ouverture']['periodesOuvertures'][$key]['dateDebut'];
+                    }
                 }
+
+
+
 
                 if (isset($content['informationsFeteEtManifestation']['typesManifestation'][0]['libelleFr'])) {
                     $node->set('ao_manifestation_type', $content['informationsFeteEtManifestation']['typesManifestation'][0]['libelleFr']);
