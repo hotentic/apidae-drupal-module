@@ -418,7 +418,10 @@ class ApidaeController extends ControllerBase
                             if (!is_null($linkId)) {
                                 $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/' . $linkId);
                                 $linkElt = $value['objetTouristique']['nom']['libelleFr'] . '|' . $linkAlias;
-                                $node->set('ao_link' . ($key + 1), $linkElt);
+
+//                                $node->set('ao_link' . ($key + 1), $linkElt);
+                                $node->ao_links[] = $linkElt;
+
                                 if (strpos(strtolower($value['objetTouristique']['nom']['libelleFr']), 'aappma') !== false) {
                                     $node->set('ao_entity', $linkElt);
                                 }
