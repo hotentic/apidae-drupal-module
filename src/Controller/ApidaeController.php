@@ -328,9 +328,6 @@ class ApidaeController extends ControllerBase
                     }
                 }
 
-
-
-
                 if (isset($content['informationsFeteEtManifestation']['typesManifestation'][0]['libelleFr'])) {
                     $node->set('ao_manifestation_type', $content['informationsFeteEtManifestation']['typesManifestation'][0]['libelleFr']);
                 }
@@ -413,7 +410,7 @@ class ApidaeController extends ControllerBase
                 // links (format is : label|url)
                 if (isset($content['liens']) && isset($content['liens']['liensObjetsTouristiquesTypes'])) {
                     foreach ($content['liens']['liensObjetsTouristiquesTypes'] as $key => $value) {
-                        if ($key < 5 && $value['objetTouristique']) {
+//                      if ($key < 5 && $value['objetTouristique']) {
                             $linkId = $this->checkNodeExists($value['objetTouristique']['id']);
                             if (!is_null($linkId)) {
                                 $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/' . $linkId);
@@ -426,7 +423,7 @@ class ApidaeController extends ControllerBase
                                     $node->set('ao_entity', $linkElt);
                                 }
                             }
-                        }
+//                      }
                     }
                 }
 
