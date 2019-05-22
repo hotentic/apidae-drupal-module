@@ -22,6 +22,7 @@ dependencies:
     - field.field.node.apidae_object.ao_short_desc
     - field.field.node.apidae_object.ao_pic1_large
     - field.field.node.apidae_object.ao_pic1_medium
+    - field.field.node.apidae_object.ao_pictures_medium
     - field.field.node.apidae_object.ao_pic1_title
     - field.field.node.apidae_object.ao_pic1_credits
     - field.field.node.apidae_object.ao_video_url
@@ -33,8 +34,8 @@ dependencies:
     - field.field.node.apidae_object.ao_dates
     - field.field.node.apidae_object.ao_animals
     - field.field.node.apidae_object.ao_adapted_tourism
-    - field.field.node.apidae_object.ao_adapted_desc_motor_handicap
-    - field.field.node.apidae_object.ao_adapted_host_complement
+    - field.field.node.apidae_object.ao_desc_motor_handicap
+    - field.field.node.apidae_object.ao_host_complement
     - field.field.node.apidae_object.ao_rates
     - field.field.node.apidae_object.ao_privdesc1
     - field.field.node.apidae_object.ao_privdesc2
@@ -277,5 +278,11 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: datetime_default
+    region: content
+  ao_pictures_medium:
+    weight: 134
+    settings: {  }
+    third_party_settings: {  }
+    type: string
     region: content
 hidden: {  }

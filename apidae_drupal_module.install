@@ -157,3 +157,24 @@ function apidae_drupal_module_update_8108() {
     }
   }
 }
+
+
+/**
+ * Adding pictures medium field
+ */
+function apidae_drupal_module_update_8109() {
+  $module_path = drupal_get_path('module', 'apidae_drupal_module');
+
+  $fields = ['pictures_medium'];
+
+  foreach ($fields as $field) {
+    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.ao_'.$field.'.yml'));
+    if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
+      FieldStorageConfig::create($yml)->save();
+    }
+    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.field.node.apidae_object.ao_'.$field.'.yml'));
+    if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
+      FieldConfig::create($yml)->save();
+    }
+  }
+}

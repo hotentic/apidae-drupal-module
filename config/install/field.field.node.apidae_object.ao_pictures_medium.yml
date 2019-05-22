@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_pictures_medium
+    - node.type.apidae_object
+id: node.apidae_object.ao_pictures_medium
+field_name: ao_pictures_medium
+entity_type: node
+bundle: apidae_object
+label: URLs images moyen format
+description: "Adresse web des images en moyen format"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: string

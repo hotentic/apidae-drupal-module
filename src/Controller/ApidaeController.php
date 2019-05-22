@@ -263,6 +263,15 @@ class ApidaeController extends ControllerBase
                 if (isset($content['illustrations'][0]['traductionFichiers'][0]['urlDiaporama'])) {
                     $node->set('ao_pic1_medium', $content['illustrations'][0]['traductionFichiers'][0]['urlDiaporama']);
                 }
+
+                if (isset($content['illustrations'])){
+                    foreach ($content['illustrations'] as $key => $value) {
+                        if (isset($content['illustrations'][$key]['traductionFichiers'][0]['urlDiaporama'])) {
+                            $node->ao_pictures_medium[] = $content['illustrations'][$key]['traductionFichiers'][0]['urlDiaporama'];
+                        }
+                    }
+                }
+
                 if (isset($content['illustrations'][0]['nom']['libelleFr'])) {
                     $node->set('ao_pic1_title', $content['illustrations'][0]['nom']['libelleFr']);
                 }
