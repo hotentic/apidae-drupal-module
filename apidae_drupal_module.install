@@ -196,3 +196,23 @@ function apidae_drupal_module_update_8110() {
     }
   }
 }
+
+/**
+ * Adding ao_linked_objects field
+ */
+function apidae_drupal_module_update_8111() {
+  $module_path = drupal_get_path('module', 'apidae_drupal_module');
+
+  $fields = ['linked_objects'];
+
+  foreach ($fields as $field) {
+    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.ao_'.$field.'.yml'));
+    if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
+      FieldStorageConfig::create($yml)->save();
+    }
+    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.field.node.apidae_object.ao_'.$field.'.yml'));
+    if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
+      FieldConfig::create($yml)->save();
+    }
+  }
+}

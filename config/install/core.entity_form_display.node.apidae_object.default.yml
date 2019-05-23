@@ -53,6 +53,7 @@ dependencies:
     - field.field.node.apidae_object.ao_link4
     - field.field.node.apidae_object.ao_link5
     - field.field.node.apidae_object.ao_links
+    - field.field.node.apidae_object.ao_linked_objects
     - field.field.node.apidae_object.ao_entity
     - field.field.node.apidae_object.ao_structure_information
     - field.field.node.apidae_object.ao_animals_complement
@@ -291,5 +292,11 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: string
+    region: content
+  ao_linked_objects:
+    weight: 136
+    settings: {  }
+    third_party_settings: {  }
+    type: ao_link
     region: content
 hidden: {  }

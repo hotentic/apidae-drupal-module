@@ -1,0 +1,21 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_linked_objects
+    - node.type.apidae_object
+  module:
+    - apidae_drupal_module
+id: node.apidae_object.ao_linked_objects
+field_name: ao_linked_objects
+entity_type: node
+bundle: apidae_object
+label: Objets liés
+description: "Objets liés"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: ao_link
+
