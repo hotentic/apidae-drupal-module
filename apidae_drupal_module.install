@@ -20,6 +20,21 @@ function _add_ao_field($field) {
   }
 }
 
+function _remove_ao_field($field) {
+  $bundle = 'apidae_object';
+  $entity_type = 'node';
+
+  $field_config = FieldConfig::loadByName($entity_type, $bundle, 'ao_' . $field);
+  if (!empty($field_config)) {
+    $field_config->delete();
+  }
+
+  $field_storage = FieldStorageConfig::loadByName($entity_type, 'ao_' . $field);
+  if (!empty($field_storage)) {
+    $field_storage->delete();
+  }
+}
+
 /**
 * Adding privdesc1 field to touristic objects
 */
@@ -121,25 +136,25 @@ function apidae_drupal_module_update_8111() {
  * Add ao_pictures field & remove obsolete fields
  */
 function apidae_drupal_module_update_8112() {
-  $bundle = 'apidae_object';
-  $entity_type = 'node';
-
-  $removed_fields = ['ao_date', 'ao_link1', 'ao_link2', 'ao_link3', 'ao_link4', 'ao_link5', 'ao_links',
-    'ao_pic1_title', 'ao_pic1_credits', 'ao_pic1_large', 'ao_pic1_medium', 'ao_pictures_medium'];
+  $removed_fields = ['date', 'link1', 'link2', 'link3', 'link4', 'link5', 'links',
+    'pic1_title', 'pic1_credits', 'pic1_large', 'pic1_medium', 'pictures_medium'];
 
   foreach ($removed_fields as $field) {
-    $field = FieldConfig::loadByName($entity_type, $bundle, $field);
-    if (!empty($field)) {
-      $field->delete();
-    }
-  }
-
-  foreach ($removed_fields as $field) {
-    $field_storage = FieldStorageConfig::loadByName($entity_type, $field);
-    if (!empty($field_storage)) {
-      $field_storage->delete();
-    }
+    _remove_ao_field($field);
   }
 
   _add_ao_field('pictures');
+}
+
+/**
+ * Add ao_attachments field & remove obsolete fields
+ */
+function apidae_drupal_module_update_8113() {
+  $removed_fields = ['pdf_title', 'pdf_url', 'video_title', 'video_url'];
+
+  foreach ($removed_fields as $field) {
+    _remove_ao_field($field);
+  }
+
+  _add_ao_field('attachments');
 }

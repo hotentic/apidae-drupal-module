@@ -6,17 +6,17 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 
 /**
- * Plugin implementation of the 'ao picture' formatter.
+ * Plugin implementation of the 'ao attachment' formatter.
  *
  * @FieldFormatter (
- *   id = "ao_picture_formatter",
- *   label = @Translation("AO Picture"),
+ *   id = "ao_attachment_formatter",
+ *   label = @Translation("AO Attachment"),
  *   field_types = {
- *     "ao_picture"
+ *     "ao_attachment"
  *   }
  * )
  */
-class AoPictureFormatter extends FormatterBase
+class AoAttachmentFormatter extends FormatterBase
 {
 
   /**
@@ -37,12 +37,12 @@ class AoPictureFormatter extends FormatterBase
     foreach ($items as $delta => $item) {
 
       $source = array(
-        '#markup' => '<img src="' . $item->url_medium . '" alt="' . $item->title . '" />',
-        '#title' => $item->title,
+        '#markup' => '<a href="' . $item->url . '" target="_blank">' . $item->name . '</a>',
+        '#name' => $item->name,
+        '#type' => $item->type,
+        '#url' => $item->url,
         '#credits' => $item->credits,
-        '#url_large' => $item->url_large,
-        '#url_medium' => $item->url_medium,
-        '#url_small' => $item->url_small
+        '#description' => $item->description
       );
 
       $elements[$delta] = $source;

@@ -21,10 +21,7 @@ dependencies:
     - field.field.node.apidae_object.ao_website
     - field.field.node.apidae_object.ao_short_desc
     - field.field.node.apidae_object.ao_pictures
-    - field.field.node.apidae_object.ao_video_url
-    - field.field.node.apidae_object.ao_video_title
-    - field.field.node.apidae_object.ao_pdf_url
-    - field.field.node.apidae_object.ao_pdf_title
+    - field.field.node.apidae_object.ao_attachments
     - field.field.node.apidae_object.ao_openings
     - field.field.node.apidae_object.ao_dates
     - field.field.node.apidae_object.ao_animals
@@ -154,30 +151,12 @@ content:
     third_party_settings: {  }
     type: ao_picture
     region: content
-  ao_video_title:
-    label: hidden
-    type: string_textfield
-    weight: 119
+  ao_attachments:
+    weight: 116
     settings: {  }
     third_party_settings: {  }
-  ao_video_url:
-    label: hidden
-    type: string_textfield
-    weight: 120
-    settings: {  }
-    third_party_settings: {  }
-  ao_pdf_title:
-    label: hidden
-    type: string_textfield
-    weight: 121
-    settings: {  }
-    third_party_settings: {  }
-  ao_pdf_url:
-    label: hidden
-    type: string_textfield
-    weight: 122
-    settings: {  }
-    third_party_settings: {  }
+    type: ao_attachment
+    region: content
   ao_openings:
     label: hidden
     type: text_textarea

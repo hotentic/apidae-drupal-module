@@ -1,0 +1,21 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_attachments
+    - node.type.apidae_object
+  module:
+    - apidae_drupal_module
+id: node.apidae_object.ao_attachments
+field_name: ao_attachments
+entity_type: node
+bundle: apidae_object
+label: Fichiers joints
+description: "Fichiers joints de l'objet touristique"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: ao_attachment
+

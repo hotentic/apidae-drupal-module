@@ -16,7 +16,7 @@ class ApidaeController extends ControllerBase
 
     public function import()
     {
-        \Drupal::logger('Apidae')->info('Importing Apidae data - v1.1');
+        \Drupal::logger('Apidae')->info('Importing Apidae data');
 
         $apidaeConfig = $this->config('system.apidae');
         $apiUrl = $apidaeConfig->get('api.url');
@@ -66,10 +66,6 @@ class ApidaeController extends ControllerBase
 
         return new Response('', 204);
     }
-
-//http://api.apidae-tourisme.com/api/v002/recherche/list-objets-touristiques?query={"apiKey":"nNiMK72L","projetId":"2449","selectionIds":[50351],"count":100,"first":100,"order":"NOM","responseFields":["id", "nom", "@informationsObjetTouristique","donneesPrivees"]}
-
-//"http://api.apidae-tourisme.com/api/v002/recherche/list-objets-touristiques?query={\"apiKey\":\"nNiMK72L\",\"projetId\":\"2449\",\"selectionIds\":[50351],\"responseFields\":[\"id\",\"nom\",\"donneesPrivees\"]}"
 
     private function loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $offset)
     {
@@ -256,7 +252,8 @@ class ApidaeController extends ControllerBase
                     $node->set('ao_short_desc', $content['presentation']['descriptifCourt']['libelleFr']);
                 }
 
-                // pictures fields
+                // pictures field
+                $node->ao_pictures = [];
                 if (isset($content['illustrations'])) {
                     foreach ($content['illustrations'] as $key => $value) {
                         if (isset($value['traductionFichiers'][0]['url'])) {
@@ -271,23 +268,18 @@ class ApidaeController extends ControllerBase
                     }
                 }
 
+                // attachments field
+                $node->ao_attachments = [];
                 if (isset($content['multimedias'])) {
                     foreach ($content['multimedias'] as $key => $value) {
-                        switch ($value['type']) {
-                            case 'VIDEO' :
-                                $node->set('ao_video_url', $value['traductionFichiers']['0']['url']);
-                                if (isset($value['nom']['libelleFr'])) {
-                                    $node->set('ao_video_title', $value['nom']['libelleFr']);
-                                }
-                                break;
-                            case 'DOCUMENT' :
-                                if (strpos($value['traductionFichiers'][0]['url'], 'pdf')) {
-                                    $node->set('ao_pdf_url', $value['traductionFichiers'][0]['url']);
-                                    if (isset($value['nom']['libelleFr'])) {
-                                        $node->set('ao_pdf_title', $value['nom']['libelleFr']);
-                                    }
-                                    break;
-                                }
+                        if (isset($value['traductionFichiers'][0]['url'])) {
+                            $node->ao_attachments[] = [
+                                'title' => $value['nom']['libelleFr'],
+                                'type' => $value['type'],
+                                'url' => $value['traductionFichiers'][0]['url'],
+                                'credits' => $value['copyright']['libelleFr'],
+                                'description' => $value['legende']['libelleFr']
+                            ];
                         }
                     }
                 }
@@ -312,6 +304,8 @@ class ApidaeController extends ControllerBase
                     $node->set('ao_host_complement', $content['prestations']['complementAccueil']['libelleFr']);
                 }
 
+                // dates field
+                $node->ao_dates = [];
                 if (isset($content['ouverture']['periodesOuvertures'][0]['dateDebut'])) {
                     foreach ($content['ouverture']['periodesOuvertures'] as $key => $value) {
                         $node->ao_dates[] = $content['ouverture']['periodesOuvertures'][$key]['dateDebut'];
@@ -398,6 +392,7 @@ class ApidaeController extends ControllerBase
                 }
 
                 // linked objects
+                $node->ao_linked_objects = [];
                 if (isset($content['liens']) && isset($content['liens']['liensObjetsTouristiquesTypes'])) {
                     foreach ($content['liens']['liensObjetsTouristiquesTypes'] as $key => $value) {
                         $linkId = $this->checkNodeExists($value['objetTouristique']['id']);
