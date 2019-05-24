@@ -274,7 +274,7 @@ class ApidaeController extends ControllerBase
                     foreach ($content['multimedias'] as $key => $value) {
                         if (isset($value['traductionFichiers'][0]['url'])) {
                             $node->ao_attachments[] = [
-                                'title' => $value['nom']['libelleFr'],
+                                'name' => $value['nom']['libelleFr'],
                                 'type' => $value['type'],
                                 'url' => $value['traductionFichiers'][0]['url'],
                                 'credits' => $value['copyright']['libelleFr'],
