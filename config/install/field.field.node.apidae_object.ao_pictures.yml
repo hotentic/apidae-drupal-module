@@ -1,0 +1,21 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_pictures
+    - node.type.apidae_object
+  module:
+    - apidae_drupal_module
+id: node.apidae_object.ao_pictures
+field_name: ao_pictures
+entity_type: node
+bundle: apidae_object
+label: Images
+description: "Images de l'objet touristique"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: ao_picture
+

@@ -4,7 +4,7 @@ description: 'Intégration des flux Apidae dans le CMS Drupal.'
 core: 8.x
 package: Custom
 configure: apidae.config
-version: 1.11
+version: 1.12
 
 dependencies:
   - field

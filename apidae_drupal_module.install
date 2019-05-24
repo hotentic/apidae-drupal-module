@@ -4,32 +4,11 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Symfony\Component\Yaml\Yaml;
 
-/**
-* Adding privdesc1 field to touristic objects
-*/
-function apidae_drupal_module_update_8101() {
-    $module_path = drupal_get_path('module', 'apidae_drupal_module');
-
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.ao_privdesc1.yml'));
-    if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
-        FieldStorageConfig::create($yml)->save();
-    }
-
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.field.node.apidae_object.ao_privdesc1.yml'));
-    if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
-        FieldConfig::create($yml)->save();
-    }
-}
-
-/**
- * Adding additional private desc fields and contacts to touristic objects
- */
-function apidae_drupal_module_update_8102() {
+function _add_ao_field($field) {
   $module_path = drupal_get_path('module', 'apidae_drupal_module');
 
-  $fields = ['privdesc2', 'privdesc3', 'contact1', 'contact2', 'contact3'];
-
-  foreach ($fields as $field) {
+  if (file_get_contents($module_path . '/config/install/field.storage.node.ao_'.$field.'.yml') &&
+    file_get_contents($module_path . '/config/install/field.field.node.apidae_object.ao_'.$field.'.yml')) {
     $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.ao_'.$field.'.yml'));
     if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
       FieldStorageConfig::create($yml)->save();
@@ -38,6 +17,24 @@ function apidae_drupal_module_update_8102() {
     if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
       FieldConfig::create($yml)->save();
     }
+  }
+}
+
+/**
+* Adding privdesc1 field to touristic objects
+*/
+function apidae_drupal_module_update_8101() {
+  _add_ao_field('privdesc1');
+}
+
+/**
+ * Adding additional private desc fields and contacts to touristic objects
+ */
+function apidae_drupal_module_update_8102() {
+  $fields = ['privdesc2', 'privdesc3', 'contact1', 'contact2', 'contact3'];
+
+  foreach ($fields as $field) {
+    _add_ao_field($field);
   }
 }
 
@@ -45,19 +42,10 @@ function apidae_drupal_module_update_8102() {
  * Adding internal criteria fields
  */
 function apidae_drupal_module_update_8103() {
-  $module_path = drupal_get_path('module', 'apidae_drupal_module');
-
   $fields = ['internal1', 'internal2', 'internal3'];
 
   foreach ($fields as $field) {
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.ao_'.$field.'.yml'));
-    if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
-      FieldStorageConfig::create($yml)->save();
-    }
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.field.node.apidae_object.ao_'.$field.'.yml'));
-    if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
-      FieldConfig::create($yml)->save();
-    }
+    _add_ao_field($field);
   }
 }
 
@@ -65,19 +53,10 @@ function apidae_drupal_module_update_8103() {
  * Adding type-specific criteria and links fields
  */
 function apidae_drupal_module_update_8104() {
-  $module_path = drupal_get_path('module', 'apidae_drupal_module');
-
   $fields = ['type_criteria', 'link1', 'link2', 'link3', 'link4', 'link5'];
 
   foreach ($fields as $field) {
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.ao_'.$field.'.yml'));
-    if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
-      FieldStorageConfig::create($yml)->save();
-    }
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.field.node.apidae_object.ao_'.$field.'.yml'));
-    if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
-      FieldConfig::create($yml)->save();
-    }
+    _add_ao_field($field);
   }
 }
 
@@ -85,35 +64,17 @@ function apidae_drupal_module_update_8104() {
  * Adding managing entity fields
  */
 function apidae_drupal_module_update_8105() {
-  $module_path = drupal_get_path('module', 'apidae_drupal_module');
-
-  $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.ao_entity.yml'));
-  if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
-    FieldStorageConfig::create($yml)->save();
-  }
-  $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.field.node.apidae_object.ao_entity.yml'));
-  if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
-    FieldConfig::create($yml)->save();
-  }
+  _add_ao_field('entity');
 }
 
 /**
  * Adding types_manifestation, date, complement_accueil and animals fields
  */
 function apidae_drupal_module_update_8106() {
-  $module_path = drupal_get_path('module', 'apidae_drupal_module');
-
   $fields = ['manifestation_type', 'date', 'host_complement', 'animals', 'desc_motor_handicap', 'adapted_tourism'];
 
   foreach ($fields as $field) {
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.ao_'.$field.'.yml'));
-    if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
-      FieldStorageConfig::create($yml)->save();
-    }
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.field.node.apidae_object.ao_'.$field.'.yml'));
-    if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
-      FieldConfig::create($yml)->save();
-    }
+    _add_ao_field($field);
   }
 }
 
@@ -121,19 +82,10 @@ function apidae_drupal_module_update_8106() {
  * Adding animals_complement, structure_information
  */
 function apidae_drupal_module_update_8107() {
-  $module_path = drupal_get_path('module', 'apidae_drupal_module');
-
   $fields = ['animals_complement', 'structure_information'];
 
   foreach ($fields as $field) {
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.ao_'.$field.'.yml'));
-    if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
-      FieldStorageConfig::create($yml)->save();
-    }
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.field.node.apidae_object.ao_'.$field.'.yml'));
-    if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
-      FieldConfig::create($yml)->save();
-    }
+    _add_ao_field($field);
   }
 }
 
@@ -141,78 +93,53 @@ function apidae_drupal_module_update_8107() {
  * Adding dates field
  */
 function apidae_drupal_module_update_8108() {
-  $module_path = drupal_get_path('module', 'apidae_drupal_module');
-
-  $fields = ['dates'];
-
-  foreach ($fields as $field) {
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.ao_'.$field.'.yml'));
-    if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
-      FieldStorageConfig::create($yml)->save();
-    }
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.field.node.apidae_object.ao_'.$field.'.yml'));
-    if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
-      FieldConfig::create($yml)->save();
-    }
-  }
+  _add_ao_field('dates');
 }
 
 /**
  * Adding pictures medium field
  */
 function apidae_drupal_module_update_8109() {
-  $module_path = drupal_get_path('module', 'apidae_drupal_module');
-
-  $fields = ['pictures_medium'];
-
-  foreach ($fields as $field) {
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.ao_'.$field.'.yml'));
-    if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
-      FieldStorageConfig::create($yml)->save();
-    }
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.field.node.apidae_object.ao_'.$field.'.yml'));
-    if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
-      FieldConfig::create($yml)->save();
-    }
-  }
+  _add_ao_field('pictures_medium');
 }
 
 /**
  * Adding links field
  */
 function apidae_drupal_module_update_8110() {
-  $module_path = drupal_get_path('module', 'apidae_drupal_module');
-
-  $fields = ['links'];
-
-  foreach ($fields as $field) {
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.ao_'.$field.'.yml'));
-    if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
-      FieldStorageConfig::create($yml)->save();
-    }
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.field.node.apidae_object.ao_'.$field.'.yml'));
-    if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
-      FieldConfig::create($yml)->save();
-    }
-  }
+  _add_ao_field('links');
 }
 
 /**
  * Adding ao_linked_objects field
  */
 function apidae_drupal_module_update_8111() {
-  $module_path = drupal_get_path('module', 'apidae_drupal_module');
+  _add_ao_field('linked_objects');
+}
 
-  $fields = ['linked_objects'];
+/**
+ * Add ao_pictures field & remove obsolete fields
+ */
+function apidae_drupal_module_update_8112() {
+  $bundle = 'apidae_object';
+  $entity_type = 'node';
 
-  foreach ($fields as $field) {
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.ao_'.$field.'.yml'));
-    if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
-      FieldStorageConfig::create($yml)->save();
-    }
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.field.node.apidae_object.ao_'.$field.'.yml'));
-    if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
-      FieldConfig::create($yml)->save();
+  $removed_fields = ['ao_date', 'ao_link1', 'ao_link2', 'ao_link3', 'ao_link4', 'ao_link5', 'ao_links',
+    'ao_pic1_title', 'ao_pic1_credits', 'ao_pic1_large', 'ao_pic1_medium', 'ao_pictures_medium'];
+
+  foreach ($removed_fields as $field) {
+    $field = FieldConfig::loadByName($entity_type, $bundle, $field);
+    if (!empty($field)) {
+      $field->delete();
     }
   }
+
+  foreach ($removed_fields as $field) {
+    $field_storage = FieldStorageConfig::loadByName($entity_type, $field);
+    if (!empty($field_storage)) {
+      $field_storage->delete();
+    }
+  }
+
+  _add_ao_field('pictures');
 }

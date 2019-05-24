@@ -256,27 +256,19 @@ class ApidaeController extends ControllerBase
                     $node->set('ao_short_desc', $content['presentation']['descriptifCourt']['libelleFr']);
                 }
 
-                // first picture fields
-                if (isset($content['illustrations'][0]['traductionFichiers'][0]['url'])) {
-                    $node->set('ao_pic1_large', $content['illustrations'][0]['traductionFichiers'][0]['url']);
-                }
-                if (isset($content['illustrations'][0]['traductionFichiers'][0]['urlDiaporama'])) {
-                    $node->set('ao_pic1_medium', $content['illustrations'][0]['traductionFichiers'][0]['urlDiaporama']);
-                }
-
+                // pictures fields
                 if (isset($content['illustrations'])) {
                     foreach ($content['illustrations'] as $key => $value) {
-                        if (isset($content['illustrations'][$key]['traductionFichiers'][0]['urlDiaporama'])) {
-                            $node->ao_pictures_medium[] = $content['illustrations'][$key]['traductionFichiers'][0]['urlDiaporama'];
+                        if (isset($value['traductionFichiers'][0]['url'])) {
+                            $node->ao_pictures[] = [
+                                'title' => $value['nom']['libelleFr'],
+                                'credits' => $value['copyright']['libelleFr'],
+                                'url_large' => $value['traductionFichiers'][0]['url'],
+                                'url_medium' => $value['traductionFichiers'][0]['urlDiaporama'],
+                                'url_small' => $value['traductionFichiers'][0]['urlFiche']
+                            ];
                         }
                     }
-                }
-
-                if (isset($content['illustrations'][0]['nom']['libelleFr'])) {
-                    $node->set('ao_pic1_title', $content['illustrations'][0]['nom']['libelleFr']);
-                }
-                if (isset($content['illustrations'][0]['copyright']['libelleFr'])) {
-                    $node->set('ao_pic1_credits', $content['illustrations'][0]['copyright']['libelleFr']);
                 }
 
                 if (isset($content['multimedias'])) {
@@ -321,8 +313,6 @@ class ApidaeController extends ControllerBase
                 }
 
                 if (isset($content['ouverture']['periodesOuvertures'][0]['dateDebut'])) {
-                    $node->set('ao_date', $content['ouverture']['periodesOuvertures'][0]['dateDebut']);
-
                     foreach ($content['ouverture']['periodesOuvertures'] as $key => $value) {
                         $node->ao_dates[] = $content['ouverture']['periodesOuvertures'][$key]['dateDebut'];
                     }
@@ -407,16 +397,13 @@ class ApidaeController extends ControllerBase
                     }
                 }
 
-                // links (format is : label|url)
+                // linked objects
                 if (isset($content['liens']) && isset($content['liens']['liensObjetsTouristiquesTypes'])) {
                     foreach ($content['liens']['liensObjetsTouristiquesTypes'] as $key => $value) {
-//                      if ($key < 5 && $value['objetTouristique']) {
                         $linkId = $this->checkNodeExists($value['objetTouristique']['id']);
                         if (!is_null($linkId)) {
                             $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/' . $linkId);
                             $linkElt = $value['objetTouristique']['nom']['libelleFr'] . '|' . $linkAlias;
-
-//                              $node->set('ao_link' . ($key + 1), $linkElt);
 
                             $node->ao_linked_objects[] = [
                                 'title' => $value['objetTouristique']['nom']['libelleFr'],
@@ -424,11 +411,11 @@ class ApidaeController extends ControllerBase
                                 'url' => $linkAlias,
                             ];
 
+                            // Note : to be removed
                             if (strpos(strtolower($value['objetTouristique']['nom']['libelleFr']), 'aappma') !== false) {
                                 $node->set('ao_entity', $linkElt);
                             }
                         }
-//                      }
                     }
                 }
 
