@@ -260,9 +260,9 @@ class ApidaeController extends ControllerBase
                             $node->ao_pictures[] = [
                                 'title' => $value['nom']['libelleFr'],
                                 'credits' => $value['copyright']['libelleFr'],
-                                'url_large' => $value['traductionFichiers'][0]['url'],
-                                'url_medium' => $value['traductionFichiers'][0]['urlDiaporama'],
-                                'url_small' => $value['traductionFichiers'][0]['urlFiche']
+                                'url_large' => str_replace('http:', 'https:', $value['traductionFichiers'][0]['url']),
+                                'url_medium' => str_replace('http:', 'https:', $value['traductionFichiers'][0]['urlDiaporama']),
+                                'url_small' => str_replace('http:', 'https:', $value['traductionFichiers'][0]['urlFiche'])
                             ];
                         }
                     }
