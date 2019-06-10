@@ -24,6 +24,7 @@ dependencies:
     - field.field.node.apidae_object.ao_attachments
     - field.field.node.apidae_object.ao_openings
     - field.field.node.apidae_object.ao_dates
+    - field.field.node.apidae_object.ao_path
     - field.field.node.apidae_object.ao_animals
     - field.field.node.apidae_object.ao_adapted_tourism
     - field.field.node.apidae_object.ao_desc_motor_handicap
@@ -215,6 +216,13 @@ content:
       timezone_override: ''
     third_party_settings: {  }
     type: datetime_default
+    region: content
+  ao_path:
+    weight: 133
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: ao_path
     region: content
   ao_linked_objects:
     weight: 135

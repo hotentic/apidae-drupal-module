@@ -284,6 +284,19 @@ class ApidaeController extends ControllerBase
                     }
                 }
 
+                // path / track info
+                $node->ao_path = null;
+                if (isset($content['informationsEquipement']) && isset($content['informationsEquipement']['itineraire'])) {
+                    $node->ao_path = array(
+                        'elevationGain' => $content['informationsEquipement']['itineraire']['denivellationPositive'],
+                        'type' => $content['informationsEquipement']['itineraire']['itineraireType'],
+                        'description' => $content['informationsEquipement']['itineraire']['precisionsBalisage']['libelleFr'],
+                        'duration' => $content['informationsEquipement']['itineraire']['dureeJournaliere'],
+                        'distance' => $content['informationsEquipement']['itineraire']['distance'],
+                        'waymarked' => $content['informationsEquipement']['itineraire']['itineraireBalise']
+                    );
+                }
+
                 if (isset($content['ouverture']['periodeEnClair']['libelleFr'])) {
                     $node->set('ao_openings', $content['ouverture']['periodeEnClair']['libelleFr']);
                 }

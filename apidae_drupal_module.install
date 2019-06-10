@@ -158,3 +158,10 @@ function apidae_drupal_module_update_8113() {
 
   _add_ao_field('attachments');
 }
+
+/**
+ * Add ao_path field
+ */
+function apidae_drupal_module_update_8114() {
+    _add_ao_field('path');
+}
