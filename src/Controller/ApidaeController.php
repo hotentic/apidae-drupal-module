@@ -149,8 +149,6 @@ class ApidaeController extends ControllerBase
             if (!is_null($node)) {
                 if (isset($content['presentation']['descriptifDetaille']['libelleFr'])) {
                     $desc_body = $content['presentation']['descriptifDetaille']['libelleFr'];
-                } elseif (isset($content['presentation']['descriptifCourt']['libelleFr'])) {
-                    $desc_body = $content['presentation']['descriptifCourt']['libelleFr'];
                 } else {
                     $desc_body = '';
                 }
