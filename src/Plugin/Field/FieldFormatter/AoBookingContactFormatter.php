@@ -37,7 +37,7 @@ class AoBookingContactFormatter extends FormatterBase
     foreach ($items as $delta => $item) {
 
       $source = array(
-        '#markup' => $item->coordonnees . ' (' . $item->observation . ')',
+        '#markup' => $item->coordonnees . (($item->observation) ? ' (' . $item->observation . ') <br/>' : '<br/>'),
         '#coordonnees' => $item->coordonnees,
         '#observation' => $item->observation
       );

@@ -136,6 +136,7 @@ class ApidaeController extends ControllerBase
 
     private function createNode($content, $selection, $refreshMode)
     {
+
         $contentId = $content['id'];
         $nid = $this->checkNodeExists($contentId);
 
@@ -319,7 +320,9 @@ class ApidaeController extends ControllerBase
                 $node->ao_dates = [];
                 if (isset($content['ouverture']['periodesOuvertures'][0]['dateDebut'])) {
                     foreach ($content['ouverture']['periodesOuvertures'] as $key => $value) {
-                        $node->ao_dates[] = $content['ouverture']['periodesOuvertures'][$key]['dateDebut'];
+                        if ($content['ouverture']['periodesOuvertures'][$key]['dateDebut'] >= date('Y-m-d')){
+                            $node->ao_dates[] = $content['ouverture']['periodesOuvertures'][$key]['dateDebut'];
+                        }
                     }
                 }
 
@@ -344,25 +347,25 @@ class ApidaeController extends ControllerBase
                     $node->set('ao_structure_information', $content['informations']['structureInformation']['nom']['libelleFr']);
                 }
 
-//                if (isset($content['reservation']['organismes']['nom'])) {
-//                    $node->set('ao_booking_name', $content['reservation']['organismes']['nom']);
-//                }
-//
-//                $node->ao_booking_contacts = [];
-//                if (isset($content['reservation']['organismes']['moyensCommunication'])) {
-//                    foreach ($content['reservation']['organismes']['moyensCommunication'] as $key => $value) {
-//                        if (isset($content['reservation']['organismes']['moyensCommunication'][$key]['coordonnees'])) {
-//                            $node->ao_booking_contacts[] = [
-//                                'coordonnees' => $content['reservation']['organismes']['moyensCommunication'][$key]['coordonnees']['fr'],
-//                                'observation' => (isset($content['reservation']['organismes']['moyensCommunication'][$key]['observation'])) ? $content['reservation']['organismes']['moyensCommunication'][$key]['observation']['libelleFr'] : ''
-//                            ];
-//                        }
-//                    }
-//                }
-//
-//                if (isset($content['reservation']['complement']['fr'])) {
-//                    $node->set('ao_booking_complement', $content['reservation']['complement']['fr']);
-//                }
+                if (isset($content['reservation']['organismes'][0]['nom'])) {
+                    $node->set('ao_booking_name', $content['reservation']['organismes'][0]['nom']);
+                }
+
+                $node->ao_booking_contacts = [];
+                if (isset($content['reservation']['organismes'][0]['moyensCommunication'])) {
+                    foreach ($content['reservation']['organismes'][0]['moyensCommunication'] as $key => $value) {
+                        if (isset($content['reservation']['organismes'][0]['moyensCommunication'][$key]['coordonnees'])) {
+                            $node->ao_booking_contacts[] = [
+                                'coordonnees' => $content['reservation']['organismes'][0]['moyensCommunication'][$key]['coordonnees']['fr'],
+                                'observation' => (isset($content['reservation']['organismes'][0]['moyensCommunication'][$key]['observation'])) ? $content['reservation']['organismes'][0]['moyensCommunication'][$key]['observation']['libelleFr'] : ''
+                            ];
+                        }
+                    }
+                }
+
+                if (isset($content['reservation']['complement']['libelleFr'])) {
+                    $node->set('ao_booking_complement', $content['reservation']['complement']['libelleFr']);
+                }
 
                 // descriptifs prives (ref values should be moved to configuration)
                 if (isset($content['donneesPrivees'])) {
