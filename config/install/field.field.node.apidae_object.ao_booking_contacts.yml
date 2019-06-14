@@ -1,0 +1,21 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_booking_contacts
+    - node.type.apidae_object
+  module:
+    - apidae_drupal_module
+id: node.apidae_object.ao_booking_contacts
+field_name: ao_booking_contacts
+entity_type: node
+bundle: apidae_object
+label: Contacts pour reservation
+description: "Moyen de communication pour les reservations"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: ao_booking_contact
+

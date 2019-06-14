@@ -1,0 +1,19 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_booking_name
+    - node.type.apidae_object
+id: node.apidae_object.ao_booking_name
+field_name: ao_booking_name
+entity_type: node
+bundle: apidae_object
+label: Nom de l'interlocuteur pour la reservation
+description: "Nom de l'interlocuteur pour la reservation"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: string

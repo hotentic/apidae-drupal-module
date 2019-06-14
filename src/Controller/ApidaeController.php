@@ -79,7 +79,7 @@ class ApidaeController extends ControllerBase
                 "responseFields" => ["id", "nom", "illustrations", "multimedias", "informations", "presentation",
                     "localisation", "@informationsObjetTouristique", "ouverture.periodeEnClair",
                     "ouverture.periodesOuvertures", "descriptionTarif.tarifsEnClair.libelleFr", "contacts", "liens",
-                    "donneesPrivees", "criteresInternes", 'prestations']
+                    "donneesPrivees", "criteresInternes", 'prestations', 'reservation', 'informationsEquipement']
             ]
         ]);
         \Drupal::logger('Apidae query')->info("Retrieved " . count($results['objetsTouristiques']) . " objects starting from " . $offset . " for a total of " . $results['numFound']);
@@ -343,6 +343,26 @@ class ApidaeController extends ControllerBase
                 if (isset($content['informations']['structureInformation']['nom']['libelleFr'])) {
                     $node->set('ao_structure_information', $content['informations']['structureInformation']['nom']['libelleFr']);
                 }
+
+//                if (isset($content['reservation']['organismes']['nom'])) {
+//                    $node->set('ao_booking_name', $content['reservation']['organismes']['nom']);
+//                }
+//
+//                $node->ao_booking_contacts = [];
+//                if (isset($content['reservation']['organismes']['moyensCommunication'])) {
+//                    foreach ($content['reservation']['organismes']['moyensCommunication'] as $key => $value) {
+//                        if (isset($content['reservation']['organismes']['moyensCommunication'][$key]['coordonnees'])) {
+//                            $node->ao_booking_contacts[] = [
+//                                'coordonnees' => $content['reservation']['organismes']['moyensCommunication'][$key]['coordonnees']['fr'],
+//                                'observation' => (isset($content['reservation']['organismes']['moyensCommunication'][$key]['observation'])) ? $content['reservation']['organismes']['moyensCommunication'][$key]['observation']['libelleFr'] : ''
+//                            ];
+//                        }
+//                    }
+//                }
+//
+//                if (isset($content['reservation']['complement']['fr'])) {
+//                    $node->set('ao_booking_complement', $content['reservation']['complement']['fr']);
+//                }
 
                 // descriptifs prives (ref values should be moved to configuration)
                 if (isset($content['donneesPrivees'])) {
