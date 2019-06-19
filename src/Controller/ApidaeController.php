@@ -34,6 +34,7 @@ class ApidaeController extends ControllerBase
         \Drupal::logger('Apidae')->info('Client created');
 
         if ($client) {
+            $imported_ao_ids = [];
             foreach ($selections_ids as $selection) {
                 $refreshMode = $this->config('system.apidae')->get('cron.type');
                 $objectsCount = 0;
@@ -53,14 +54,23 @@ class ApidaeController extends ControllerBase
                     \Drupal::logger('Apidae query')->info("Selection " . $selection . " - Retrieved " . count($all_objects) . " objects");
 
                     foreach ($all_objects as $touristic_object) {
-                        $this->createNode($touristic_object, $selection, $refreshMode);
+                        $imported_ao_ids[] = $this->createNode($touristic_object, $selection, $refreshMode);
                     }
                     \Drupal::logger('Apidae module')->info('%d objects updated/created successfully', array('%d' => $objectsCount));
-
                 } catch (SitraException $e) {
                     \Drupal::logger('Apidae module')->error('An error occurred during the retrieval of Apidae data. Please make sure that all configuration values have been properly set.');
                     \Drupal::logger('Apidae module')->error($e->getMessage());
                 }
+            }
+            $all_ao_ids = \Drupal::entityQuery('node')->condition('type', 'apidae_object', '=')->execute();
+            $deleted_ao_ids = array_diff($all_ao_ids, $imported_ao_ids);
+            if (count($deleted_ao_ids) > 0) {
+                \Drupal::logger('Apidae module')->info('%d objects eligible for deletion : %o', array('%d' => count($deleted_ao_ids), '%o' => join(', ', $deleted_ao_ids)));
+                $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($deleted_ao_ids);
+                \Drupal::entityTypeManager()->getStorage('node')->delete($nodes);
+                \Drupal::logger('Apidae module')->info('Deletion successful');
+            } else {
+                \Drupal::logger('Apidae module')->info('No objects to delete');
             }
         }
 
@@ -119,7 +129,7 @@ class ApidaeController extends ControllerBase
         return $result;
     }
 
-    private function createApidaeObject()
+    private function initApidaeObject()
     {
         $node = Node::create([
             'type' => 'apidae_object',
@@ -138,14 +148,15 @@ class ApidaeController extends ControllerBase
     {
 
         $contentId = $content['id'];
-        $nid = $this->checkNodeExists($contentId);
+        $existingId = $this->checkNodeExists($contentId);
+        $nid = $existingId;
 
-        if (is_null($nid) || $refreshMode == 'new_content_and_updates') {
+        if (is_null($existingId) || $refreshMode == 'new_content_and_updates') {
 
-            if (is_null($nid)) {
-                $node = $this->createApidaeObject();
+            if (is_null($existingId)) {
+                $node = $this->initApidaeObject();
             } else {
-                $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+                $node = \Drupal::entityTypeManager()->getStorage('node')->load($existingId);
             }
             if (!is_null($node)) {
                 if (isset($content['presentation']['descriptifDetaille']['libelleFr'])) {
@@ -320,7 +331,7 @@ class ApidaeController extends ControllerBase
                 $node->ao_dates = [];
                 if (isset($content['ouverture']['periodesOuvertures'][0]['dateDebut'])) {
                     foreach ($content['ouverture']['periodesOuvertures'] as $key => $value) {
-                        if ($content['ouverture']['periodesOuvertures'][$key]['dateDebut'] >= date('Y-m-d')) {
+                        if ($content['ouverture']['periodesOuvertures'][$key]['dateDebut'] >= date('Y-m-d')){
                             $node->ao_dates[] = $content['ouverture']['periodesOuvertures'][$key]['dateDebut'];
                         }
                     }
@@ -367,14 +378,17 @@ class ApidaeController extends ControllerBase
                     $node->set('ao_booking_complement', $content['reservation']['complement']['libelleFr']);
                 }
 
-                $node->ao_privdescs = [];
                 // descriptifs prives (ref values should be moved to configuration)
                 if (isset($content['donneesPrivees'])) {
                     foreach ($content['donneesPrivees'] as $key => $value) {
-                        $node->ao_privdescs[] = [
-                            'key' => $value['nomTechnique'],
-                            'value' => $value['descriptif']['libelleFr']
-                        ];
+                        if ($key < 3) {
+                            $privateField = $value['nomTechnique'];
+                            if ($privateField == '1486_References') {
+                                $node->set('ao_privdesc1', $value['descriptif']['libelleFr']);
+                            } elseif ($privateField == '1486_InformationsComplementaires') {
+                                $node->set('ao_privdesc2', $value['descriptif']['libelleFr']);
+                            }
+                        }
                     }
                 }
 
@@ -464,11 +478,13 @@ class ApidaeController extends ControllerBase
                 }
 
                 $node->save();
+                $nid = $node->id();
             } else {
-                if (!is_null($nid)) {
-                    \Drupal::logger('Apidae')->warning('Could not retrieve ' . $nid);
+                if (!is_null($existingId)) {
+                    \Drupal::logger('Apidae')->warning('Could not retrieve ' . $existingId);
                 }
             }
         }
+        return $nid;
     }
 }
