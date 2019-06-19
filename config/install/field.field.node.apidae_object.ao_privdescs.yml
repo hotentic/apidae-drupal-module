@@ -1,0 +1,20 @@
+langcode: fr
+status: true
+dependencies:
+  config:
+    - field.storage.node.ao_privdescs
+    - node.type.apidae_object
+  module:
+    - apidae_drupal_module
+id: node.apidae_object.ao_privdescs
+field_name: ao_privdescs
+entity_type: node
+bundle: apidae_object
+label: Descriptifs privés
+description: "Descriptifs privés"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: { }
+field_type: ao_key_value

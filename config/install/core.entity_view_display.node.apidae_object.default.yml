@@ -47,6 +47,7 @@ dependencies:
     - field.field.node.apidae_object.ao_booking_contacts
     - field.field.node.apidae_object.ao_booking_complement
     - field.field.node.apidae_object.ao_booking_name
+    - field.field.node.apidae_object.ao_privdescs
     - node.type.apidae_object
 id: node.apidae_object.default
 targetEntityType: node
@@ -251,6 +252,12 @@ content:
     label: hidden
     type: string
     weight: 138
+    settings: {  }
+    third_party_settings: {  }
+  ao_privdescs:
+    label: hidden
+    type: ao_key_value
+    weight: 139
     settings: {  }
     third_party_settings: {  }
 hidden: {  }

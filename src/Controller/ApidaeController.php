@@ -320,7 +320,7 @@ class ApidaeController extends ControllerBase
                 $node->ao_dates = [];
                 if (isset($content['ouverture']['periodesOuvertures'][0]['dateDebut'])) {
                     foreach ($content['ouverture']['periodesOuvertures'] as $key => $value) {
-                        if ($content['ouverture']['periodesOuvertures'][$key]['dateDebut'] >= date('Y-m-d')){
+                        if ($content['ouverture']['periodesOuvertures'][$key]['dateDebut'] >= date('Y-m-d')) {
                             $node->ao_dates[] = $content['ouverture']['periodesOuvertures'][$key]['dateDebut'];
                         }
                     }
@@ -367,17 +367,14 @@ class ApidaeController extends ControllerBase
                     $node->set('ao_booking_complement', $content['reservation']['complement']['libelleFr']);
                 }
 
+                $node->ao_privdescs = [];
                 // descriptifs prives (ref values should be moved to configuration)
                 if (isset($content['donneesPrivees'])) {
                     foreach ($content['donneesPrivees'] as $key => $value) {
-                        if ($key < 3) {
-                            $privateField = $value['nomTechnique'];
-                            if ($privateField == '1486_References') {
-                                $node->set('ao_privdesc1', $value['descriptif']['libelleFr']);
-                            } elseif ($privateField == '1486_InformationsComplementaires') {
-                                $node->set('ao_privdesc2', $value['descriptif']['libelleFr']);
-                            }
-                        }
+                        $node->ao_privdescs[] = [
+                            'key' => $value['nomTechnique'],
+                            'value' => $value['descriptif']['libelleFr']
+                        ];
                     }
                 }
 

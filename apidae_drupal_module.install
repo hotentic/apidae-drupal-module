@@ -177,3 +177,10 @@ function apidae_drupal_module_update_8115() {
     }
 
 }
+
+/**
+ * Add ao_privdescs field
+ */
+function apidae_drupal_module_update_8116() {
+    _add_ao_field('privdescs');
+}
