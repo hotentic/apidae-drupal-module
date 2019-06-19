@@ -80,12 +80,12 @@ class AoKeyValueWidget extends WidgetBase
     {
         $element['key'] = array(
             '#type' => 'textfield',
-            '#title' => t('KEY => value'),
+            '#title' => t('Key'),
             '#default_value' => isset($items[$delta]->key) ? $items[$delta]->key : NULL
         );
         $element['value'] = array(
             '#type' => 'textfield',
-            '#title' => t('key => VALUE'),
+            '#title' => t('Value'),
             '#default_value' => isset($items[$delta]->value) ? $items[$delta]->value : NULL
         );
 
