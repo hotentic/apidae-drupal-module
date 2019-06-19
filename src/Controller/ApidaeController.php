@@ -378,17 +378,14 @@ class ApidaeController extends ControllerBase
                     $node->set('ao_booking_complement', $content['reservation']['complement']['libelleFr']);
                 }
 
-                // descriptifs prives (ref values should be moved to configuration)
+                // descriptifs prives
+                $node->ao_privdescs = [];
                 if (isset($content['donneesPrivees'])) {
                     foreach ($content['donneesPrivees'] as $key => $value) {
-                        if ($key < 3) {
-                            $privateField = $value['nomTechnique'];
-                            if ($privateField == '1486_References') {
-                                $node->set('ao_privdesc1', $value['descriptif']['libelleFr']);
-                            } elseif ($privateField == '1486_InformationsComplementaires') {
-                                $node->set('ao_privdesc2', $value['descriptif']['libelleFr']);
-                            }
-                        }
+                        $node->ao_privdescs[] = [
+                            'key' => $value['nomTechnique'],
+                            'value' => $value['descriptif']['libelleFr']
+                        ];
                     }
                 }
 
