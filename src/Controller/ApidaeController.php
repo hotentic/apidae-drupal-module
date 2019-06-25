@@ -319,6 +319,7 @@ class ApidaeController extends ControllerBase
                     $node->set('ao_animals', $content['prestations']['animauxAcceptes']);
                 }
 
+                $node->ao_animals_complement = '';
                 if (isset($content['prestations']['descriptifAnimauxAcceptes']['libelleFr'])) {
                     $node->set('ao_animals_complement', $content['prestations']['descriptifAnimauxAcceptes']['libelleFr']);
                 }
