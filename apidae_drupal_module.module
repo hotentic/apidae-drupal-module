@@ -1,17 +1,19 @@
 <?php
 
 /**
-* Implements hook_cron().
-*/
-function apidae_cron() {
-    $last_import = \Drupal::state()->get('apidae.last_import', 0);
+ * Implements hook_cron().
+ */
+function apidae_drupal_module_cron() {
+    $now = \Drupal::time()->getRequestTime();
     $is_active = \Drupal::config('system.apidae')->get('cron.active');
     if ($is_active) {
+        $last_import = \Drupal::state()->get('apidae.last_import', 0);
         $frequency = \Drupal::config('system.apidae')->get('cron.frequency');
-        if ((REQUEST_TIME - $last_import) > 3600 * 24 * $frequency) {
+        if (($now - $last_import) > 3600 * 24 * $frequency) {
+            \Drupal::logger('cron')->notice('Running apidae cron with params : ' . $is_active . ' - ' . $last_import);
             $apidae_controller = new \Drupal\apidae_drupal_module\Controller\ApidaeController;
             $apidae_controller->import();
-            \Drupal::state()->set('apidae.last_import', REQUEST_TIME);
+            \Drupal::state()->set('apidae.last_import', $now);
         }
     }
 }

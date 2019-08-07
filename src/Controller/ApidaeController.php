@@ -159,25 +159,16 @@ class ApidaeController extends ControllerBase
                 $node = \Drupal::entityTypeManager()->getStorage('node')->load($existingId);
             }
             if (!is_null($node)) {
-                if (isset($content['presentation']['descriptifDetaille']['libelleFr'])) {
-                    $desc_body = $content['presentation']['descriptifDetaille']['libelleFr'];
-                } else {
-                    $desc_body = '';
-                }
+                $desc_body = $content['presentation']['descriptifDetaille']['libelleFr'] ?? '';
 
                 $node->set('ao_id', $contentId);
                 $node->setTitle($content['nom']['libelleFr']);
                 $node->set('body', array(
                     'value' => $desc_body,
                     'format' => 'full_html',
-                    'summary' => isset($content['presentation']['descriptifCourt']['libelleFr']) ? $content['presentation']['descriptifCourt']['libelleFr'] : text_summary($desc_body)
+                    'summary' => $content['presentation']['descriptifCourt']['libelleFr'] ??  text_summary($desc_body)
                 ));
                 $node->set('ao_type', $content['type']);
-
-                // todo : setup yaml-based taxonomy (see https://www.metaltoad.com/blog/drupal-8-migrations-part-3-migrating-taxonomies-drupal-7)
-                //      $type = $content['type'];
-                //      $tid = _get_tid_from_type($type);
-                //      $node->ao_type['und'][0] = array('tid' => $tid);
 
                 // matched selections
                 $selectionKey = "(" . $selection . ")";
@@ -190,27 +181,13 @@ class ApidaeController extends ControllerBase
                 }
 
                 // location data
-                if (isset($content['localisation']['adresse']['adresse1'])) {
-                    $node->set('ao_address1', $content['localisation']['adresse']['adresse1']);
-                }
-                if (isset($content['localisation']['adresse']['adresse2'])) {
-                    $node->set('ao_address2', $content['localisation']['adresse']['adresse2']);
-                }
-                if (isset($content['localisation']['adresse']['adresse3'])) {
-                    $node->set('ao_address3', $content['localisation']['adresse']['adresse3']);
-                }
-                if (isset($content['localisation']['adresse']['codePostal'])) {
-                    $node->set('ao_postal_code', $content['localisation']['adresse']['codePostal']);
-                }
-                if (isset($content['localisation']['adresse']['commune']['nom'])) {
-                    $node->set('ao_town', $content['localisation']['adresse']['commune']['nom']);
-                }
-                if (isset($content['localisation']['geolocalisation']['geoJson']['coordinates']['0'])) {
-                    $node->set('ao_latitude', $content['localisation']['geolocalisation']['geoJson']['coordinates']['1']);
-                }
-                if (isset($content['localisation']['geolocalisation']['geoJson']['coordinates']['1'])) {
-                    $node->set('ao_longitude', $content['localisation']['geolocalisation']['geoJson']['coordinates']['0']);
-                }
+                $node->set('ao_address1', $content['localisation']['adresse']['adresse1'] ?? null);
+                $node->set('ao_address2', $content['localisation']['adresse']['adresse2'] ?? null);
+                $node->set('ao_address3', $content['localisation']['adresse']['adresse3'] ?? null);
+                $node->set('ao_postal_code', $content['localisation']['adresse']['codePostal'] ?? null);
+                $node->set('ao_town', $content['localisation']['adresse']['commune']['nom'] ?? null);
+                $node->set('ao_latitude', $content['localisation']['geolocalisation']['geoJson']['coordinates']['1'] ?? null);
+                $node->set('ao_longitude', $content['localisation']['geolocalisation']['geoJson']['coordinates']['0'] ?? null);
 
                 // moyens de communication
                 if (isset($content['informations']['moyensCommunication'])) {
@@ -238,7 +215,13 @@ class ApidaeController extends ControllerBase
                 if (isset($content['contacts'])) {
                     foreach ($content['contacts'] as $key => $value) {
                         if ($key < 3) {
-                            $contact = $value['prenom'] . " " . $value['nom'] . " - " . $value['titre']['libelleFr'];
+                            $contact = '';
+                            if (isset($value['prenom']) && isset($value['nom'])) {
+                                $contact .= $value['prenom'] . " " . $value['nom'];
+                                if (isset($value['titre'])) {
+                                    $contact .= ' - ' . $value['titre']['libelleFr'];
+                                }
+                            }
                             if (isset($value['moyensCommunication'])) {
                                 foreach ($value['moyensCommunication'] as $kee => $val) {
                                     switch ($val['type']['id']) {
@@ -258,9 +241,7 @@ class ApidaeController extends ControllerBase
                     }
                 }
 
-                if (isset($content['presentation']['descriptifCourt']['libelleFr'])) {
-                    $node->set('ao_short_desc', $content['presentation']['descriptifCourt']['libelleFr']);
-                }
+                $node->set('ao_short_desc', $content['presentation']['descriptifCourt']['libelleFr'] ?? null);
 
                 // pictures field
                 $node->ao_pictures = [];
@@ -268,8 +249,8 @@ class ApidaeController extends ControllerBase
                     foreach ($content['illustrations'] as $key => $value) {
                         if (isset($value['traductionFichiers'][0]['url'])) {
                             $node->ao_pictures[] = [
-                                'title' => $value['nom']['libelleFr'],
-                                'credits' => $value['copyright']['libelleFr'],
+                                'title' => $value['nom']['libelleFr'] ?? null,
+                                'credits' => $value['copyright']['libelleFr'] ?? null,
                                 'url_large' => str_replace('http:', 'https:', $value['traductionFichiers'][0]['url']),
                                 'url_medium' => str_replace('http:', 'https:', $value['traductionFichiers'][0]['urlDiaporama']),
                                 'url_small' => str_replace('http:', 'https:', $value['traductionFichiers'][0]['urlFiche'])
@@ -284,11 +265,11 @@ class ApidaeController extends ControllerBase
                     foreach ($content['multimedias'] as $key => $value) {
                         if (isset($value['traductionFichiers'][0]['url'])) {
                             $node->ao_attachments[] = [
-                                'name' => $value['nom']['libelleFr'],
-                                'type' => $value['type'],
-                                'url' => $value['traductionFichiers'][0]['url'],
-                                'credits' => $value['copyright']['libelleFr'],
-                                'description' => $value['legende']['libelleFr']
+                                'name' => $value['nom']['libelleFr'] ?? null,
+                                'type' => $value['type'] ?? null,
+                                'url' => $value['traductionFichiers'][0]['url'] ?? null,
+                                'credits' => $value['copyright']['libelleFr'] ?? null,
+                                'description' => $value['legende']['libelleFr'] ?? null
                             ];
                         }
                     }
@@ -298,35 +279,20 @@ class ApidaeController extends ControllerBase
                 $node->ao_path = null;
                 if (isset($content['informationsEquipement']) && isset($content['informationsEquipement']['itineraire'])) {
                     $node->ao_path = array(
-                        'elevationGain' => $content['informationsEquipement']['itineraire']['denivellationPositive'],
-                        'type' => $content['informationsEquipement']['itineraire']['itineraireType'],
-                        'description' => $content['informationsEquipement']['itineraire']['precisionsBalisage']['libelleFr'],
-                        'duration' => $content['informationsEquipement']['itineraire']['dureeJournaliere'],
-                        'distance' => $content['informationsEquipement']['itineraire']['distance'],
-                        'waymarked' => $content['informationsEquipement']['itineraire']['itineraireBalise']
+                        'elevationGain' => $content['informationsEquipement']['itineraire']['denivellationPositive'] ?? null,
+                        'type' => $content['informationsEquipement']['itineraire']['itineraireType'] ?? null,
+                        'description' => $content['informationsEquipement']['itineraire']['precisionsBalisage']['libelleFr'] ?? null,
+                        'duration' => $content['informationsEquipement']['itineraire']['dureeJournaliere'] ?? null,
+                        'distance' => $content['informationsEquipement']['itineraire']['distance'] ?? null,
+                        'waymarked' => $content['informationsEquipement']['itineraire']['itineraireBalise'] ?? null
                     );
                 }
 
-                if (isset($content['ouverture']['periodeEnClair']['libelleFr'])) {
-                    $node->set('ao_openings', $content['ouverture']['periodeEnClair']['libelleFr']);
-                }
-
-                if (isset($content['descriptionTarif']['tarifsEnClair']['libelleFr'])) {
-                    $node->set('ao_rates', $content['descriptionTarif']['tarifsEnClair']['libelleFr']);
-                }
-
-                if (isset($content['prestations']['animauxAcceptes'])) {
-                    $node->set('ao_animals', $content['prestations']['animauxAcceptes']);
-                }
-
-                $node->ao_animals_complement = '';
-                if (isset($content['prestations']['descriptifAnimauxAcceptes']['libelleFr'])) {
-                    $node->set('ao_animals_complement', $content['prestations']['descriptifAnimauxAcceptes']['libelleFr']);
-                }
-
-                if (isset($content['prestations']['complementAccueil']['libelleFr'])) {
-                    $node->set('ao_host_complement', $content['prestations']['complementAccueil']['libelleFr']);
-                }
+                $node->set('ao_openings', $content['ouverture']['periodeEnClair']['libelleFr'] ?? null);
+                $node->set('ao_rates', $content['descriptionTarif']['tarifsEnClair']['libelleFr'] ?? null);
+                $node->set('ao_animals', $content['prestations']['animauxAcceptes'] ?? null);
+                $node->set('ao_animals_complement', $content['prestations']['descriptifAnimauxAcceptes']['libelleFr'] ?? '');
+                $node->set('ao_host_complement', $content['prestations']['complementAccueil']['libelleFr'] ?? null);
 
                 // dates field
                 $node->ao_dates = [];
@@ -338,9 +304,7 @@ class ApidaeController extends ControllerBase
                     }
                 }
 
-                if (isset($content['informationsFeteEtManifestation']['typesManifestation'][0]['libelleFr'])) {
-                    $node->set('ao_manifestation_type', $content['informationsFeteEtManifestation']['typesManifestation'][0]['libelleFr']);
-                }
+                $node->set('ao_manifestation_type', $content['informationsFeteEtManifestation']['typesManifestation'][0]['libelleFr'] ?? null);
 
                 $node->ao_adapted_tourism = '';
                 if (isset($content['prestations']['tourismesAdaptes'])) {
@@ -351,33 +315,23 @@ class ApidaeController extends ControllerBase
                     $node->set('ao_adapted_tourism', join('|', $adapted_tourism));
                 }
 
-                if (isset($content['prestations']['descriptifHandicapMoteur']['libelleFr'])) {
-                    $node->set('ao_desc_motor_handicap', $content['prestations']['descriptifHandicapMoteur']['libelleFr']);
-                }
-
-                if (isset($content['informations']['structureInformation']['nom']['libelleFr'])) {
-                    $node->set('ao_structure_information', $content['informations']['structureInformation']['nom']['libelleFr']);
-                }
-
-                if (isset($content['reservation']['organismes'][0]['nom'])) {
-                    $node->set('ao_booking_name', $content['reservation']['organismes'][0]['nom']);
-                }
+                $node->set('ao_desc_motor_handicap', $content['prestations']['descriptifHandicapMoteur']['libelleFr'] ?? null);
+                $node->set('ao_structure_information', $content['informations']['structureInformation']['nom']['libelleFr'] ?? null);
+                $node->set('ao_booking_name', $content['reservation']['organismes'][0]['nom'] ?? null);
 
                 $node->ao_booking_contacts = [];
                 if (isset($content['reservation']['organismes'][0]['moyensCommunication'])) {
                     foreach ($content['reservation']['organismes'][0]['moyensCommunication'] as $key => $value) {
                         if (isset($content['reservation']['organismes'][0]['moyensCommunication'][$key]['coordonnees'])) {
                             $node->ao_booking_contacts[] = [
-                                'coordonnees' => $content['reservation']['organismes'][0]['moyensCommunication'][$key]['coordonnees']['fr'],
-                                'observation' => (isset($content['reservation']['organismes'][0]['moyensCommunication'][$key]['observation'])) ? $content['reservation']['organismes'][0]['moyensCommunication'][$key]['observation']['libelleFr'] : ''
+                                'coordonnees' => $content['reservation']['organismes'][0]['moyensCommunication'][$key]['coordonnees']['fr'] ?? null,
+                                'observation' => $content['reservation']['organismes'][0]['moyensCommunication'][$key]['observation']['libelleFr'] ?? ''
                             ];
                         }
                     }
                 }
 
-                if (isset($content['reservation']['complement']['libelleFr'])) {
-                    $node->set('ao_booking_complement', $content['reservation']['complement']['libelleFr']);
-                }
+                $node->set('ao_booking_complement', $content['reservation']['complement']['libelleFr'] ?? null);
 
                 // descriptifs prives
                 $node->ao_privdescs = [];
@@ -385,7 +339,7 @@ class ApidaeController extends ControllerBase
                     foreach ($content['donneesPrivees'] as $key => $value) {
                         $node->ao_privdescs[] = [
                             'key' => $value['nomTechnique'],
-                            'value' => $value['descriptif']['libelleFr']
+                            'value' => $value['descriptif']['libelleFr'] ?? null
                         ];
                     }
                 }
