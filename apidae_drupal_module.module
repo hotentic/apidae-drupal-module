@@ -1,0 +1,17 @@
+<?php
+
+/**
+* Implements hook_cron().
+*/
+function apidae_cron() {
+    $last_import = \Drupal::state()->get('apidae.last_import', 0);
+    $is_active = \Drupal::config('system.apidae')->get('cron.active');
+    if ($is_active) {
+        $frequency = \Drupal::config('system.apidae')->get('cron.frequency');
+        if ((REQUEST_TIME - $last_import) > 3600 * 24 * $frequency) {
+            $apidae_controller = new \Drupal\apidae_drupal_module\Controller\ApidaeController;
+            $apidae_controller->import();
+            \Drupal::state()->set('apidae.last_import', REQUEST_TIME);
+        }
+    }
+}
