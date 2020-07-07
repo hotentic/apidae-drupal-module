@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.apidae_object.ao_type
     - field.field.node.apidae_object.ao_manifestation_type
     - field.field.node.apidae_object.ao_selections
+    - field.field.node.apidae_object.ao_place
     - field.field.node.apidae_object.ao_address1
     - field.field.node.apidae_object.ao_address2
     - field.field.node.apidae_object.ao_address3
@@ -70,6 +71,12 @@ content:
     label: selections
     type: string
     weight: 102
+    settings: {  }
+    third_party_settings: {  }
+  ao_place:
+    label: hidden
+    type: string
+    weight: 103
     settings: {  }
     third_party_settings: {  }
   ao_address1:

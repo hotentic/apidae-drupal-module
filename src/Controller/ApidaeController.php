@@ -181,6 +181,7 @@ class ApidaeController extends ControllerBase
                 }
 
                 // location data
+                $node->set('ao_place', $content['localisation']['adresse']['nomDuLieu'] ?? null);
                 $node->set('ao_address1', $content['localisation']['adresse']['adresse1'] ?? null);
                 $node->set('ao_address2', $content['localisation']['adresse']['adresse2'] ?? null);
                 $node->set('ao_address3', $content['localisation']['adresse']['adresse3'] ?? null);
