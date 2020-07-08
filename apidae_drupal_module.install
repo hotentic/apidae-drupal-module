@@ -184,3 +184,10 @@ function apidae_drupal_module_update_8115() {
 function apidae_drupal_module_update_8116() {
     _add_ao_field('privdescs');
 }
+
+/**
+ * Add ao_place field
+ */
+function apidae_drupal_module_update_8120() {
+  _add_ao_field('place');
+}
