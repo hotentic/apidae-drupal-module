@@ -2,10 +2,10 @@ langcode: fr
 status: true
 dependencies:
   config:
-    - field.storage.node.ao_animals_complement
+    - field.storage.node.ao_animals_desc
     - node.type.apidae_object
-id: node.apidae_object.ao_animals_complement
-field_name: ao_animals_complement
+id: node.apidae_object.ao_animals_desc
+field_name: ao_animals_desc
 entity_type: node
 bundle: apidae_object
 label: Complément d'accueil pour les animaux
@@ -16,4 +16,4 @@ default_value: {  }
 default_value_callback: ''
 settings:
   display_summary: false
-field_type: string
+field_type: text

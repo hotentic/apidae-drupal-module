@@ -292,7 +292,7 @@ class ApidaeController extends ControllerBase
                 $node->set('ao_openings', $content['ouverture']['periodeEnClair']['libelleFr'] ?? null);
                 $node->set('ao_rates', $content['descriptionTarif']['tarifsEnClair']['libelleFr'] ?? null);
                 $node->set('ao_animals', $content['prestations']['animauxAcceptes'] ?? null);
-                $node->set('ao_animals_complement', $content['prestations']['descriptifAnimauxAcceptes']['libelleFr'] ?? '');
+                $node->set('ao_animals_desc', $content['prestations']['descriptifAnimauxAcceptes']['libelleFr'] ?? '');
                 $node->set('ao_host_complement', $content['prestations']['complementAccueil']['libelleFr'] ?? null);
 
                 // dates field

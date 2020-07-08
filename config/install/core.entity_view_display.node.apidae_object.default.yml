@@ -44,7 +44,7 @@ dependencies:
     - field.field.node.apidae_object.ao_linked_objects
     - field.field.node.apidae_object.ao_entity
     - field.field.node.apidae_object.ao_structure_information
-    - field.field.node.apidae_object.ao_animals_complement
+    - field.field.node.apidae_object.ao_animals_desc
     - field.field.node.apidae_object.ao_booking_contacts
     - field.field.node.apidae_object.ao_booking_complement
     - field.field.node.apidae_object.ao_booking_name
@@ -183,7 +183,7 @@ content:
     weight: 125
     settings: {  }
     third_party_settings: {  }
-  ao_animals_complement:
+  ao_animals_desc:
     label: hidden
     type: string
     weight: 125

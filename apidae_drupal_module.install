@@ -191,3 +191,11 @@ function apidae_drupal_module_update_8116() {
 function apidae_drupal_module_update_8120() {
   _add_ao_field('place');
 }
+
+/**
+ * Replace ao_animals_complement field with ao_animals_desc field to change storage type to string_long
+ */
+function apidae_drupal_module_update_8121() {
+  _add_ao_field('animals_desc');
+  _remove_ao_field('animals_complement');
+}
