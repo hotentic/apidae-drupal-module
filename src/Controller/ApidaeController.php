@@ -219,7 +219,7 @@ class ApidaeController extends ControllerBase
                             $contact = '';
                             if (isset($value['prenom']) && isset($value['nom'])) {
                                 $contact .= $value['prenom'] . " " . $value['nom'];
-                                if (isset($value['titre'])) {
+                                if (isset($value['titre']) && isset($value['titre']['libelleFr'])) {
                                     $contact .= ' - ' . $value['titre']['libelleFr'];
                                 }
                             }
@@ -400,7 +400,7 @@ class ApidaeController extends ControllerBase
                     foreach ($content['liens']['liensObjetsTouristiquesTypes'] as $key => $value) {
                         $linkId = $this->checkNodeExists($value['objetTouristique']['id']);
                         if (!is_null($linkId)) {
-                            $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/' . $linkId);
+                            $linkAlias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $linkId);
                             $linkElt = $value['objetTouristique']['nom']['libelleFr'] . '|' . $linkAlias;
 
                             $node->ao_linked_objects[] = [
@@ -423,7 +423,7 @@ class ApidaeController extends ControllerBase
                     $managingEntity = $content['informations']['structureGestion'];
                     $entityId = $this->checkNodeExists($managingEntity['id']);
                     if (!is_null($entityId)) {
-                        $linkAlias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/' . $entityId);
+                        $linkAlias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $entityId);
                         $linkElt = $managingEntity['nom']['libelleFr'] . '|' . $linkAlias;
                         \Drupal::logger('Apidae query')->info('setting ao_entity to ' . $linkElt);
                         $node->set('ao_entity', $linkElt);
