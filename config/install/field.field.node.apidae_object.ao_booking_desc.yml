@@ -2,10 +2,10 @@ langcode: fr
 status: true
 dependencies:
   config:
-    - field.storage.node.ao_booking_complement
+    - field.storage.node.ao_booking_desc
     - node.type.apidae_object
-id: node.apidae_object.ao_booking_complement
-field_name: ao_booking_complement
+id: node.apidae_object.ao_booking_desc
+field_name: ao_booking_desc
 entity_type: node
 bundle: apidae_object
 label: Complément de réservation
@@ -16,4 +16,4 @@ default_value: {  }
 default_value_callback: ''
 settings:
   display_summary: false
-field_type: string
+field_type: text

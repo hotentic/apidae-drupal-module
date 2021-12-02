@@ -199,3 +199,11 @@ function apidae_drupal_module_update_8121() {
   _add_ao_field('animals_desc');
   _remove_ao_field('animals_complement');
 }
+
+/**
+ * Replace ao_booking_complement field with ao_booking_desc field to change storage type to string_long
+ */
+function apidae_drupal_module_update_8131() {
+  _add_ao_field('booking_desc');
+  _remove_ao_field('booking_complement');
+}

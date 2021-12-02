@@ -333,7 +333,7 @@ class ApidaeController extends ControllerBase
                     }
                 }
 
-                $node->set('ao_booking_complement', $content['reservation']['complement']['libelleFr'] ?? null);
+                $node->set('ao_booking_desc', $content['reservation']['complement']['libelleFr'] ?? null);
 
                 // descriptifs prives
                 $node->ao_privdescs = [];
