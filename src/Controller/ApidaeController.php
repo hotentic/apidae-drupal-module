@@ -12,7 +12,7 @@ class ApidaeController extends ControllerBase
 {
 
     const BATCH_SIZE = 50;
-    const MAX_CYCLES = 20;
+    const MAX_CYCLES = 50;
 
     public function import()
     {
@@ -45,7 +45,8 @@ class ApidaeController extends ControllerBase
                 try {
                     while (($cycles == 0 || $objectsCount < $results['numFound']) && $cycles < self::MAX_CYCLES) {
                         $cycles += 1;
-                        $results = $this->loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $objectsCount);
+                        $results = $this->loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria,
+                            $objectsCount, self::BATCH_SIZE);
                         if (isset($results['objetsTouristiques'])) {
                             $objectsCount += count($results['objetsTouristiques']);
                             $all_objects = array_merge($all_objects, array_values($results['objetsTouristiques']));
@@ -77,13 +78,14 @@ class ApidaeController extends ControllerBase
         return new Response('', 204);
     }
 
-    private function loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $offset)
+    private function loadApidaeResults($client, $apiKey, $apiProject, $selection, $typesCriteria, $offset, $count)
     {
         $results = $client->searchObject([
             'query' => [
                 "apiKey" => $apiKey,
                 "projetId" => $apiProject,
                 "first" => $offset,
+                "count" => $count,
                 "selectionIds" => [$selection],
                 "criteresQuery" => $typesCriteria,
                 "responseFields" => ["id", "nom", "illustrations", "multimedias", "informations", "presentation",
@@ -103,8 +105,7 @@ class ApidaeController extends ControllerBase
             $client = new Client([
                 'baseUri' => $url,
                 'apiKey' => $key,
-                'projectId' => $id,
-                'count' => self::BATCH_SIZE,
+                'projectId' => $id
             ]);
 
             return $client;
